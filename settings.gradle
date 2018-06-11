@@ -1,0 +1,2 @@
+include 'foilen-infra-resource-email'
+include 'foilen-infra-resource-email_testing'
