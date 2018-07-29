@@ -196,7 +196,7 @@ public class JamesEmailServerEventHandler extends AbstractCommonMethodUpdateEven
         if (proceed) {
 
             UnixUser unixUser = unixUsers.get(0);
-            Integer unixUserId = unixUser.getId();
+            Long unixUserId = unixUser.getId();
             MariaDBDatabase mariadbDatabase = mariadbDatabases.get(0);
             MariaDBUser mariadbUser = mariadbUsers.get(0);
 
