@@ -38,6 +38,7 @@ import com.foilen.infra.plugin.v1.model.docker.DockerContainerEndpoints;
 import com.foilen.infra.plugin.v1.model.resource.LinkTypeConstants;
 import com.foilen.infra.resource.application.Application;
 import com.foilen.infra.resource.composableapplication.AttachablePart;
+import com.foilen.infra.resource.composableapplication.AttachablePartContext;
 import com.foilen.infra.resource.composableapplication.parts.AttachableMariaDB;
 import com.foilen.infra.resource.email.resources.EmailAccount;
 import com.foilen.infra.resource.email.resources.EmailDomain;
@@ -305,7 +306,7 @@ public class JamesEmailServerEventHandler extends AbstractCommonMethodUpdateEven
                     .sorted((a, b) -> a.getResourceName().compareTo(b.getResourceName())) //
                     .forEach(attachedPart -> {
                         logger.debug("Attaching {} with type {}", attachedPart.getResourceName(), attachedPart.getClass().getName());
-                        attachedPart.attachTo(services, changes, context, application, applicationDefinition);
+                        attachedPart.attachTo(new AttachablePartContext().setServices(services).setApplication(application).setApplicationDefinition(applicationDefinition));
                     });
 
             // User

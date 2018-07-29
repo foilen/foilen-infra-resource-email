@@ -11,16 +11,13 @@ package com.foilen.infra.resource.email.resources;
 
 import java.util.Optional;
 
-import com.foilen.infra.plugin.v1.core.context.ChangesContext;
-import com.foilen.infra.plugin.v1.core.context.CommonServicesContext;
-import com.foilen.infra.plugin.v1.core.eventhandler.CommonMethodUpdateEventHandlerContext;
 import com.foilen.infra.plugin.v1.model.base.IPApplicationDefinition;
 import com.foilen.infra.plugin.v1.model.msmtp.MsmtpConfig;
 import com.foilen.infra.plugin.v1.model.outputter.msmtp.MsmtpConfigOutput;
 import com.foilen.infra.plugin.v1.model.resource.InfraPluginResourceCategory;
 import com.foilen.infra.plugin.v1.model.resource.LinkTypeConstants;
-import com.foilen.infra.resource.application.Application;
 import com.foilen.infra.resource.composableapplication.AttachablePart;
+import com.foilen.infra.resource.composableapplication.AttachablePartContext;
 import com.foilen.infra.resource.composableapplication.ComposableApplication;
 
 /**
@@ -39,11 +36,10 @@ public class AttachableEmailRelay extends AttachablePart {
     private String name;
 
     @Override
-    public void attachTo(CommonServicesContext services, ChangesContext changes, CommonMethodUpdateEventHandlerContext<?> context, Application application,
-            IPApplicationDefinition applicationDefinition) {
+    public void attachTo(AttachablePartContext context) {
 
-        Optional<EmailRelay> emailRelayOptional = services.getResourceService().linkFindAllByFromResourceAndLinkTypeAndToResourceClass(this, LinkTypeConstants.POINTS_TO, EmailRelay.class).stream()
-                .findAny();
+        Optional<EmailRelay> emailRelayOptional = context.getServices().getResourceService().linkFindAllByFromResourceAndLinkTypeAndToResourceClass(this, LinkTypeConstants.POINTS_TO, EmailRelay.class)
+                .stream().findAny();
         if (!emailRelayOptional.isPresent()) {
             return;
         }
@@ -55,6 +51,7 @@ public class AttachableEmailRelay extends AttachablePart {
         String configContent = MsmtpConfigOutput.toConfig(msmtpConfig);
 
         String configPath = "/_infra/emailRelay_" + emailRelay.getName();
+        IPApplicationDefinition applicationDefinition = context.getApplicationDefinition();
         applicationDefinition.addAssetContent(configPath, configContent);
 
         // Add service
