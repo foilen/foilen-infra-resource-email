@@ -16,6 +16,7 @@ import com.foilen.infra.plugin.v1.core.visual.helper.CommonValidation;
 import com.foilen.infra.plugin.v1.model.resource.LinkTypeConstants;
 import com.foilen.infra.resource.email.resources.AttachableEmailRelayToMsmtpConfigFile;
 import com.foilen.infra.resource.email.resources.EmailRelay;
+import com.google.common.base.Strings;
 
 public class AttachableEmailRelayToMsmtpConfigFileEditor extends SimpleResourceEditor<AttachableEmailRelayToMsmtpConfigFile> {
 
@@ -30,7 +31,11 @@ public class AttachableEmailRelayToMsmtpConfigFileEditor extends SimpleResourceE
         });
         simpleResourceEditorDefinition.addInputText(AttachableEmailRelayToMsmtpConfigFile.PROPERTY_CONFIG_PATH, fieldConfigConsumer -> {
             fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
-            fieldConfigConsumer.addValidator(CommonValidation::validateNotNullOrEmpty);
+            fieldConfigConsumer.addFormator(value -> Strings.isNullOrEmpty(value) ? "/etc/msmtprc" : value);
+        });
+        simpleResourceEditorDefinition.addInputText(AttachableEmailRelayToMsmtpConfigFile.PROPERTY_USE_TLS, fieldConfigConsumer -> {
+            fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
+            fieldConfigConsumer.addFormator(value -> Strings.isNullOrEmpty(value) ? "false" : value);
         });
 
         simpleResourceEditorDefinition.addResource("emailRelay", LinkTypeConstants.POINTS_TO, EmailRelay.class);

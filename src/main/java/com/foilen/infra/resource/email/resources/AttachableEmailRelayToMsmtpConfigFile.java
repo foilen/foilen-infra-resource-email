@@ -32,10 +32,12 @@ public class AttachableEmailRelayToMsmtpConfigFile extends AttachablePart {
 
     public static final String PROPERTY_NAME = "name";
     public static final String PROPERTY_CONFIG_PATH = "configPath";
+    public static final String PROPERTY_USE_TLS = "useTls";
 
     // Details
     private String name;
     private String configPath = "/etc/msmtprc";
+    private boolean useTls;
 
     @Override
     public void attachTo(AttachablePartContext context) {
@@ -50,11 +52,16 @@ public class AttachableEmailRelayToMsmtpConfigFile extends AttachablePart {
         EmailRelay emailRelay = emailRelayOptional.get();
         MsmtpConfig msmtpConfig = new MsmtpConfig(emailRelay.getHostname(), emailRelay.getPort());
         msmtpConfig.setUsername(emailRelay.getUsername()).setPassword(emailRelay.getPassword());
+        msmtpConfig.setTls(useTls);
         String configContent = MsmtpConfigOutput.toConfig(msmtpConfig);
 
         IPApplicationDefinition applicationDefinition = context.getApplicationDefinition();
         applicationDefinition.addAssetContent(configPath, configContent);
 
+    }
+
+    public String getConfigPath() {
+        return configPath;
     }
 
     public String getName() {
@@ -76,16 +83,20 @@ public class AttachableEmailRelayToMsmtpConfigFile extends AttachablePart {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getConfigPath() {
-        return configPath;
+    public boolean isUseTls() {
+        return useTls;
     }
 
     public void setConfigPath(String configPath) {
         this.configPath = configPath;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUseTls(boolean useTls) {
+        this.useTls = useTls;
     }
 
 }
