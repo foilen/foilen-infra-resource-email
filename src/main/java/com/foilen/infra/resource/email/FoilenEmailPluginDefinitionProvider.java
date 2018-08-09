@@ -15,7 +15,7 @@ import java.util.Collections;
 import com.foilen.infra.plugin.v1.core.context.CommonServicesContext;
 import com.foilen.infra.plugin.v1.core.plugin.IPPluginDefinitionProvider;
 import com.foilen.infra.plugin.v1.core.plugin.IPPluginDefinitionV1;
-import com.foilen.infra.resource.email.editors.AttachableEmailRelayEditor;
+import com.foilen.infra.resource.email.editors.AttachableEmailRelayToMsmtpConfigFileEditor;
 import com.foilen.infra.resource.email.editors.EmailAccountEditor;
 import com.foilen.infra.resource.email.editors.EmailDomainEditor;
 import com.foilen.infra.resource.email.editors.EmailRedirectionEditor;
@@ -23,7 +23,7 @@ import com.foilen.infra.resource.email.editors.EmailRelayEditor;
 import com.foilen.infra.resource.email.editors.JamesEmailServerEditor;
 import com.foilen.infra.resource.email.handlers.EmailDomainEventHandler;
 import com.foilen.infra.resource.email.handlers.JamesEmailServerEventHandler;
-import com.foilen.infra.resource.email.resources.AttachableEmailRelay;
+import com.foilen.infra.resource.email.resources.AttachableEmailRelayToMsmtpConfigFile;
 import com.foilen.infra.resource.email.resources.EmailAccount;
 import com.foilen.infra.resource.email.resources.EmailDomain;
 import com.foilen.infra.resource.email.resources.EmailRedirection;
@@ -69,13 +69,13 @@ public class FoilenEmailPluginDefinitionProvider implements IPPluginDefinitionPr
                         EmailAccount.PROPERTY_UID, //
                         EmailAccount.PROPERTY_ACCOUNT_NAME //
                 ));
-        pluginDefinition.addCustomResource(AttachableEmailRelay.class, "Attachable Local Email Server", //
-                Arrays.asList(EmailServer.PROPERTY_NAME), //
+        pluginDefinition.addCustomResource(AttachableEmailRelayToMsmtpConfigFile.class, "Attachable Email Relay Msmtp Config File", //
+                Arrays.asList(AttachableEmailRelayToMsmtpConfigFile.PROPERTY_NAME), //
                 Collections.emptyList());
 
         // Resource editors
         pluginDefinition.addTranslations("/com/foilen/infra/resource/email/messages");
-        pluginDefinition.addResourceEditor(new AttachableEmailRelayEditor(), AttachableEmailRelayEditor.EDITOR_NAME);
+        pluginDefinition.addResourceEditor(new AttachableEmailRelayToMsmtpConfigFileEditor(), AttachableEmailRelayToMsmtpConfigFileEditor.EDITOR_NAME);
         pluginDefinition.addResourceEditor(new EmailAccountEditor(), EmailAccountEditor.EDITOR_NAME);
         pluginDefinition.addResourceEditor(new EmailDomainEditor(), EmailDomainEditor.EDITOR_NAME);
         pluginDefinition.addResourceEditor(new EmailRedirectionEditor(), EmailRedirectionEditor.EDITOR_NAME);

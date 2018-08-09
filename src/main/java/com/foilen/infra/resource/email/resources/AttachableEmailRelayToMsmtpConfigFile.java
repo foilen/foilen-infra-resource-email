@@ -21,19 +21,21 @@ import com.foilen.infra.resource.composableapplication.AttachablePartContext;
 import com.foilen.infra.resource.composableapplication.ComposableApplication;
 
 /**
- * To add a local email server to a {@link ComposableApplication} that redirects all mails to the {@link EmailRelay}.
+ * To save a config file for msmtp on a {@link ComposableApplication} that redirects all mails to the {@link EmailRelay}.
  *
  * Link to:
  * <ul>
  * <li>{@link EmailRelay}: (1) POINTS_TO - Where to send the emails</li>
  * </ul>
  */
-public class AttachableEmailRelay extends AttachablePart {
+public class AttachableEmailRelayToMsmtpConfigFile extends AttachablePart {
 
     public static final String PROPERTY_NAME = "name";
+    public static final String PROPERTY_CONFIG_PATH = "configPath";
 
     // Details
     private String name;
+    private String configPath = "/etc/msmtprc";
 
     @Override
     public void attachTo(AttachablePartContext context) {
@@ -50,12 +52,9 @@ public class AttachableEmailRelay extends AttachablePart {
         msmtpConfig.setUsername(emailRelay.getUsername()).setPassword(emailRelay.getPassword());
         String configContent = MsmtpConfigOutput.toConfig(msmtpConfig);
 
-        String configPath = "/_infra/emailRelay_" + emailRelay.getName();
         IPApplicationDefinition applicationDefinition = context.getApplicationDefinition();
         applicationDefinition.addAssetContent(configPath, configContent);
 
-        // Add service
-        applicationDefinition.addService("email_relay", "/usr/bin/msmtp -C " + configPath);
     }
 
     public String getName() {
@@ -69,7 +68,7 @@ public class AttachableEmailRelay extends AttachablePart {
 
     @Override
     public String getResourceDescription() {
-        return "Email Domain";
+        return "Saving to " + configPath;
     }
 
     @Override
@@ -79,6 +78,14 @@ public class AttachableEmailRelay extends AttachablePart {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getConfigPath() {
+        return configPath;
+    }
+
+    public void setConfigPath(String configPath) {
+        this.configPath = configPath;
     }
 
 }

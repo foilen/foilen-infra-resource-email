@@ -14,17 +14,21 @@ import com.foilen.infra.plugin.v1.core.visual.editor.simpleresourceditor.SimpleR
 import com.foilen.infra.plugin.v1.core.visual.helper.CommonFormatting;
 import com.foilen.infra.plugin.v1.core.visual.helper.CommonValidation;
 import com.foilen.infra.plugin.v1.model.resource.LinkTypeConstants;
-import com.foilen.infra.resource.email.resources.AttachableEmailRelay;
+import com.foilen.infra.resource.email.resources.AttachableEmailRelayToMsmtpConfigFile;
 import com.foilen.infra.resource.email.resources.EmailRelay;
 
-public class AttachableEmailRelayEditor extends SimpleResourceEditor<AttachableEmailRelay> {
+public class AttachableEmailRelayToMsmtpConfigFileEditor extends SimpleResourceEditor<AttachableEmailRelayToMsmtpConfigFile> {
 
-    public static final String EDITOR_NAME = "Attachable Email Relay";
+    public static final String EDITOR_NAME = "Attachable Email Relay to msmtp Config File";
 
     @Override
     protected void getDefinition(SimpleResourceEditorDefinition simpleResourceEditorDefinition) {
 
-        simpleResourceEditorDefinition.addInputText(AttachableEmailRelay.PROPERTY_NAME, fieldConfigConsumer -> {
+        simpleResourceEditorDefinition.addInputText(AttachableEmailRelayToMsmtpConfigFile.PROPERTY_NAME, fieldConfigConsumer -> {
+            fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
+            fieldConfigConsumer.addValidator(CommonValidation::validateNotNullOrEmpty);
+        });
+        simpleResourceEditorDefinition.addInputText(AttachableEmailRelayToMsmtpConfigFile.PROPERTY_CONFIG_PATH, fieldConfigConsumer -> {
             fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
             fieldConfigConsumer.addValidator(CommonValidation::validateNotNullOrEmpty);
         });
@@ -34,8 +38,8 @@ public class AttachableEmailRelayEditor extends SimpleResourceEditor<AttachableE
     }
 
     @Override
-    public Class<AttachableEmailRelay> getForResourceType() {
-        return AttachableEmailRelay.class;
+    public Class<AttachableEmailRelayToMsmtpConfigFile> getForResourceType() {
+        return AttachableEmailRelayToMsmtpConfigFile.class;
     }
 
 }
