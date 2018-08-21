@@ -25,37 +25,37 @@ import com.foilen.infra.resource.email.resources.EmailDomain;
 import com.foilen.infra.resource.email.resources.EmailRedirection;
 import com.foilen.infra.resource.email.resources.EmailServer;
 
-public class EmailDomainEventHandler extends AbstractCommonMethodUpdateEventHandler<EmailDomain> {
+public class EmailDomainManageDomainsEventHandler extends AbstractCommonMethodUpdateEventHandler<EmailDomain> {
 
     @Override
     protected void commonHandlerExecute(CommonServicesContext services, ChangesContext changes, CommonMethodUpdateEventHandlerContext<EmailDomain> context) {
 
-        EmailDomain resource = context.getResource();
+        EmailDomain emailDomain = context.getResource();
 
         // Ensure all account names are unique per account and per redirection (can be shared)
         Set<String> accountNames = new HashSet<>();
-        services.getResourceService().linkFindAllByFromResourceClassAndLinkTypeAndToResource(EmailAccount.class, LinkTypeConstants.INSTALLED_ON, resource).forEach(account -> {
+        services.getResourceService().linkFindAllByFromResourceClassAndLinkTypeAndToResource(EmailAccount.class, LinkTypeConstants.INSTALLED_ON, emailDomain).forEach(account -> {
             if (!accountNames.add(account.getAccountName())) {
-                throw new IllegalUpdateException("The email account [" + account.getAccountName() + "@" + resource.getDomainName() + "] exists multiple times");
+                throw new IllegalUpdateException("The email account [" + account.getAccountName() + "@" + emailDomain.getDomainName() + "] exists multiple times");
             }
         });
         accountNames.clear();
-        services.getResourceService().linkFindAllByFromResourceClassAndLinkTypeAndToResource(EmailRedirection.class, LinkTypeConstants.INSTALLED_ON, resource).forEach(redirection -> {
+        services.getResourceService().linkFindAllByFromResourceClassAndLinkTypeAndToResource(EmailRedirection.class, LinkTypeConstants.INSTALLED_ON, emailDomain).forEach(redirection -> {
             if (!accountNames.add(redirection.getAccountName())) {
-                throw new IllegalUpdateException("The email redirection [" + redirection.getAccountName() + "@" + resource.getDomainName() + "] exists multiple times");
+                throw new IllegalUpdateException("The email redirection [" + redirection.getAccountName() + "@" + emailDomain.getDomainName() + "] exists multiple times");
             }
         });
 
         // Ensure only linked to one EmailServer
-        if (services.getResourceService().linkFindAllByFromResourceAndLinkTypeAndToResourceClass(resource, LinkTypeConstants.INSTALLED_ON, EmailServer.class).size() > 1) {
-            throw new IllegalUpdateException("The email domain [" + resource.getDomainName() + "] is installed on more than one Email server");
+        if (services.getResourceService().linkFindAllByFromResourceAndLinkTypeAndToResourceClass(emailDomain, LinkTypeConstants.INSTALLED_ON, EmailServer.class).size() > 1) {
+            throw new IllegalUpdateException("The email domain [" + emailDomain.getDomainName() + "] is installed on more than one Email server");
         }
 
         // Add domains
         context.getManagedResourceTypes().add(Domain.class);
-        context.getManagedResources().add(new Domain(resource.getDomainName(), DomainHelper.reverseDomainName(resource.getDomainName())));
-        context.getManagedResources().add(new Domain(resource.getImapDomainName(), DomainHelper.reverseDomainName(resource.getImapDomainName())));
-        context.getManagedResources().add(new Domain(resource.getPop3DomainName(), DomainHelper.reverseDomainName(resource.getPop3DomainName())));
+        context.getManagedResources().add(new Domain(emailDomain.getDomainName(), DomainHelper.reverseDomainName(emailDomain.getDomainName())));
+        context.getManagedResources().add(new Domain(emailDomain.getImapDomainName(), DomainHelper.reverseDomainName(emailDomain.getImapDomainName())));
+        context.getManagedResources().add(new Domain(emailDomain.getPop3DomainName(), DomainHelper.reverseDomainName(emailDomain.getPop3DomainName())));
 
     }
 

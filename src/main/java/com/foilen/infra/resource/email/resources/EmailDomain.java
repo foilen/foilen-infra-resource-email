@@ -11,6 +11,8 @@ package com.foilen.infra.resource.email.resources;
 
 import com.foilen.infra.plugin.v1.model.resource.AbstractIPResource;
 import com.foilen.infra.plugin.v1.model.resource.InfraPluginResourceCategory;
+import com.foilen.infra.resource.dns.DnsEntry;
+import com.foilen.infra.resource.dns.DnsPointer;
 import com.foilen.infra.resource.domain.Domain;
 import com.foilen.infra.resource.webcertificate.WebsiteCertificate;
 
@@ -28,16 +30,20 @@ import com.foilen.infra.resource.webcertificate.WebsiteCertificate;
  * Manages:
  * <ul>
  * <li>{@link Domain}: Creates/uses a {@link Domain} to make sure it is owned by the user</li>
+ * <li>{@link DnsEntry}: Creates a {@link DnsEntry} for MX</li>
+ * <li>{@link DnsPointer}: Creates a {@link DnsPointer} for As that point to the EmailServer's machines</li>
  * </ul>
  */
 public class EmailDomain extends AbstractIPResource {
 
     public static final String PROPERTY_DOMAIN_NAME = "domainName";
+    public static final String PROPERTY_MX_DOMAIN_NAME = "mxDomainName";
     public static final String PROPERTY_IMAP_DOMAIN_NAME = "imapDomainName";
     public static final String PROPERTY_POP3_DOMAIN_NAME = "pop3DomainName";
 
     // Details
     private String domainName;
+    private String mxDomainName;
     private String imapDomainName;
     private String pop3DomainName;
 
@@ -47,6 +53,10 @@ public class EmailDomain extends AbstractIPResource {
 
     public String getImapDomainName() {
         return imapDomainName;
+    }
+
+    public String getMxDomainName() {
+        return mxDomainName;
     }
 
     public String getPop3DomainName() {
@@ -74,6 +84,10 @@ public class EmailDomain extends AbstractIPResource {
 
     public void setImapDomainName(String imapDomainName) {
         this.imapDomainName = imapDomainName;
+    }
+
+    public void setMxDomainName(String mxDomainName) {
+        this.mxDomainName = mxDomainName;
     }
 
     public void setPop3DomainName(String pop3DomainName) {

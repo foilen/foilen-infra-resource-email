@@ -21,7 +21,7 @@ import com.foilen.infra.resource.email.resources.EmailAccount;
 import com.foilen.infra.resource.email.resources.EmailDomain;
 import com.foilen.infra.resource.email.resources.EmailRedirection;
 
-public class EmailDomainEventHandlerTest extends AbstractIPPluginTest {
+public class EmailDomainManageDomainsEventHandlerTest extends AbstractIPPluginTest {
 
     @Test(expected = IllegalUpdateException.class)
     public void testValidateUniqueAccounts_2accountsSame_FAIL() {

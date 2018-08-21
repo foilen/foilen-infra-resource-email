@@ -21,7 +21,8 @@ import com.foilen.infra.resource.email.editors.EmailDomainEditor;
 import com.foilen.infra.resource.email.editors.EmailRedirectionEditor;
 import com.foilen.infra.resource.email.editors.EmailRelayEditor;
 import com.foilen.infra.resource.email.editors.JamesEmailServerEditor;
-import com.foilen.infra.resource.email.handlers.EmailDomainEventHandler;
+import com.foilen.infra.resource.email.handlers.EmailDomainManageDnsEntryEventHandler;
+import com.foilen.infra.resource.email.handlers.EmailDomainManageDomainsEventHandler;
 import com.foilen.infra.resource.email.handlers.JamesEmailServerEventHandler;
 import com.foilen.infra.resource.email.resources.AttachableEmailRelayToMsmtpConfigFile;
 import com.foilen.infra.resource.email.resources.EmailAccount;
@@ -83,7 +84,8 @@ public class FoilenEmailPluginDefinitionProvider implements IPPluginDefinitionPr
         pluginDefinition.addResourceEditor(new JamesEmailServerEditor(), JamesEmailServerEditor.EDITOR_NAME);
 
         // Updater Handler
-        pluginDefinition.addUpdateHandler(new EmailDomainEventHandler());
+        pluginDefinition.addUpdateHandler(new EmailDomainManageDnsEntryEventHandler());
+        pluginDefinition.addUpdateHandler(new EmailDomainManageDomainsEventHandler());
         pluginDefinition.addUpdateHandler(new JamesEmailServerEventHandler());
 
         return pluginDefinition;

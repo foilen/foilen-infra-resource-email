@@ -38,7 +38,7 @@
 		{
 			"resourceType": "Email Domain",
 			"resourceName": "example.com",
-			"resourceJson": "{\"domainName\":\"example.com\",\"imapDomainName\":\"mail.example.com\",\"pop3DomainName\":\"mail.example.com\",\"resourceCategory\":\"EMAIL\",\"resourceDescription\":\"Email Domain\",\"resourceEditorName\":\"Email Domain\",\"resourceName\":\"example.com\"}"
+			"resourceJson": "{\"domainName\":\"example.com\",\"mxDomainName\":\"mail.example.com\",\"imapDomainName\":\"mail.example.com\",\"pop3DomainName\":\"mail.example.com\",\"resourceCategory\":\"EMAIL\",\"resourceDescription\":\"Email Domain\",\"resourceEditorName\":\"Email Domain\",\"resourceName\":\"example.com\"}"
 		},
 		{
 			"resourceType": "Email Redirection",
