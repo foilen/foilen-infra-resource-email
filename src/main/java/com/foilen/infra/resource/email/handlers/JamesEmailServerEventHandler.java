@@ -24,14 +24,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import com.foilen.infra.plugin.v1.core.context.ChangesContext;
 import com.foilen.infra.plugin.v1.core.context.CommonServicesContext;
-import com.foilen.infra.plugin.v1.core.eventhandler.AbstractCommonMethodUpdateEventHandler;
-import com.foilen.infra.plugin.v1.core.eventhandler.CommonMethodUpdateEventHandlerContext;
+import com.foilen.infra.plugin.v1.core.eventhandler.AbstractFinalStateManagedResourcesEventHandler;
+import com.foilen.infra.plugin.v1.core.eventhandler.FinalStateManagedResource;
+import com.foilen.infra.plugin.v1.core.eventhandler.FinalStateManagedResourcesUpdateEventHandlerContext;
 import com.foilen.infra.plugin.v1.core.exception.IllegalUpdateException;
 import com.foilen.infra.plugin.v1.core.exception.ProblemException;
 import com.foilen.infra.plugin.v1.core.service.IPResourceService;
-import com.foilen.infra.plugin.v1.core.visual.helper.CommonResourceLink;
 import com.foilen.infra.plugin.v1.model.base.IPApplicationDefinition;
 import com.foilen.infra.plugin.v1.model.base.IPApplicationDefinitionAssetsBundle;
 import com.foilen.infra.plugin.v1.model.docker.DockerContainerEndpoints;
@@ -60,7 +59,7 @@ import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-public class JamesEmailServerEventHandler extends AbstractCommonMethodUpdateEventHandler<JamesEmailServer> {
+public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResourcesEventHandler<JamesEmailServer> {
 
     private static Cache<String, byte[]> keystorePerThumbprint = CacheBuilder.newBuilder() //
             .maximumSize(1000).expireAfterWrite(10, TimeUnit.MINUTES) //
@@ -101,9 +100,7 @@ public class JamesEmailServerEventHandler extends AbstractCommonMethodUpdateEven
     }
 
     @Override
-    protected void commonHandlerExecute(CommonServicesContext services, ChangesContext changes, CommonMethodUpdateEventHandlerContext<JamesEmailServer> context) {
-
-        context.setManagedResourcesUpdateContentIfExists(true);
+    protected void commonHandlerExecute(CommonServicesContext services, FinalStateManagedResourcesUpdateEventHandlerContext<JamesEmailServer> context) {
 
         context.addManagedResourceTypes(Application.class);
 
@@ -202,7 +199,9 @@ public class JamesEmailServerEventHandler extends AbstractCommonMethodUpdateEven
 
             // Create an Application
             Application application = new Application();
-            context.addManagedResources(application);
+            FinalStateManagedResource applicationFinalStateManagedResource = new FinalStateManagedResource();
+            applicationFinalStateManagedResource.setManagedResource(application);
+            context.addManagedResources(applicationFinalStateManagedResource);
             application.setName(jamesEmailServer.getName());
             application.setDescription(jamesEmailServer.getResourceDescription());
 
@@ -324,10 +323,12 @@ public class JamesEmailServerEventHandler extends AbstractCommonMethodUpdateEven
             applicationDefinition.addPortExposed(110, 10110); // POP3
 
             // Link machines
-            CommonResourceLink.syncToLinks(services, changes, application, LinkTypeConstants.INSTALLED_ON, Machine.class, machines);
+            applicationFinalStateManagedResource.addManagedLinksToType(LinkTypeConstants.INSTALLED_ON);
+            machines.forEach(machine -> applicationFinalStateManagedResource.addLinkTo(LinkTypeConstants.INSTALLED_ON, machine));
 
             // Link unix user
-            CommonResourceLink.syncToLinks(services, changes, application, LinkTypeConstants.RUN_AS, UnixUser.class, unixUsers);
+            applicationFinalStateManagedResource.addManagedLinksToType(LinkTypeConstants.RUN_AS);
+            applicationFinalStateManagedResource.addLinkTo(LinkTypeConstants.RUN_AS, unixUser);
 
         }
 
