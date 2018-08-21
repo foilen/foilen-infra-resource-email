@@ -31,6 +31,11 @@ public class EmailDomainEditor extends SimpleResourceEditor<EmailDomain> {
             fieldConfigConsumer.addValidator(CommonValidation::validateDomainName);
             fieldConfigConsumer.addValidator(CommonValidation::validateNotNullOrEmpty);
         });
+        simpleResourceEditorDefinition.addInputText(EmailDomain.PROPERTY_MX_DOMAIN_NAME, fieldConfigConsumer -> {
+            fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
+            fieldConfigConsumer.addValidator(CommonValidation::validateDomainName);
+            fieldConfigConsumer.addValidator(CommonValidation::validateNotNullOrEmpty);
+        });
         simpleResourceEditorDefinition.addInputText(EmailDomain.PROPERTY_IMAP_DOMAIN_NAME, fieldConfigConsumer -> {
             fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
             fieldConfigConsumer.addValidator(CommonValidation::validateDomainName);
