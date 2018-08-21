@@ -23,6 +23,7 @@ import com.foilen.infra.resource.domain.Domain;
 import com.foilen.infra.resource.email.resources.EmailAccount;
 import com.foilen.infra.resource.email.resources.EmailDomain;
 import com.foilen.infra.resource.email.resources.EmailRedirection;
+import com.foilen.infra.resource.email.resources.EmailServer;
 
 public class EmailDomainEventHandler extends AbstractCommonMethodUpdateEventHandler<EmailDomain> {
 
@@ -44,6 +45,11 @@ public class EmailDomainEventHandler extends AbstractCommonMethodUpdateEventHand
                 throw new IllegalUpdateException("The email redirection [" + redirection.getAccountName() + "@" + resource.getDomainName() + "] exists multiple times");
             }
         });
+
+        // Ensure only linked to one EmailServer
+        if (services.getResourceService().linkFindAllByFromResourceAndLinkTypeAndToResourceClass(resource, LinkTypeConstants.INSTALLED_ON, EmailServer.class).size() > 1) {
+            throw new IllegalUpdateException("The email domain [" + resource.getDomainName() + "] is installed on more than one Email server");
+        }
 
         // Add domains
         context.getManagedResourceTypes().add(Domain.class);

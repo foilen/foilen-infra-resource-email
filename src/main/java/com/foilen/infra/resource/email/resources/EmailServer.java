@@ -25,7 +25,7 @@ import com.foilen.infra.resource.unixuser.UnixUser;
  *
  * Manages:
  * <ul>
- * <li>{@link Application}: The apache application</li>
+ * <li>{@link Application}: The application</li>
  * </ul>
  */
 public abstract class EmailServer extends AbstractIPResource {

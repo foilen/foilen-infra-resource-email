@@ -34,7 +34,7 @@ import com.foilen.infra.resource.webcertificate.WebsiteCertificate;
  *
  * Manages:
  * <ul>
- * <li>{@link Application}: The apache application</li>
+ * <li>{@link Application}: The James application</li>
  * </ul>
  */
 public class JamesEmailServer extends EmailServer {

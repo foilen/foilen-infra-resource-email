@@ -18,7 +18,7 @@ import com.foilen.infra.resource.webcertificate.WebsiteCertificate;
  * This is a domain that is managed by an email server.<br/>
  * Links to:
  * <ul>
- * <li>{@link EmailServer}: (optional / many) INSTALLED_ON - The email servers that manages that domain</li>
+ * <li>{@link EmailServer}: (optional / 1) INSTALLED_ON - The email servers that manages that domain</li>
  * <li>{@link WebsiteCertificate}: (optional / 1) USES_SMTP - Needed for TLS (on domainName).</li>
  * <li>{@link WebsiteCertificate}: (optional / 1) USES_IMAP - Needed for TLS (on imapDomainName).</li>
  * <li>{@link WebsiteCertificate}: (optional / 1) USES_POP3 - Needed for TLS (on pop3DomainName).</li>

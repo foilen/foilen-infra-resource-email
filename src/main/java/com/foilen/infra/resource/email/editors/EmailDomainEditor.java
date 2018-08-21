@@ -42,7 +42,7 @@ public class EmailDomainEditor extends SimpleResourceEditor<EmailDomain> {
             fieldConfigConsumer.addValidator(CommonValidation::validateNotNullOrEmpty);
         });
 
-        simpleResourceEditorDefinition.addResources("emailServers", LinkTypeConstants.INSTALLED_ON, EmailServer.class);
+        simpleResourceEditorDefinition.addResource("emailServer", LinkTypeConstants.INSTALLED_ON, EmailServer.class);
         simpleResourceEditorDefinition.addResource("smtpCert", "USES_SMTP", WebsiteCertificate.class);
         simpleResourceEditorDefinition.addResource("imapCert", "USES_IMAP", WebsiteCertificate.class);
         simpleResourceEditorDefinition.addResource("pop3Cert", "USES_POP3", WebsiteCertificate.class);
