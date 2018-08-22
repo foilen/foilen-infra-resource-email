@@ -58,7 +58,7 @@
 		{
 			"resourceType": "Machine",
 			"resourceName": "localhost",
-			"resourceJson": "{\"name\":\"localhost\",\"publicIp\":null,\"resourceCategory\":\"INFRASTRUCTURE\",\"resourceDescription\":\"localhost\",\"resourceEditorName\":\"Machine\",\"resourceName\":\"localhost\"}"
+			"resourceJson": "{\"name\":\"localhost\",\"publicIp\":\"127.0.0.1\",\"resourceCategory\":\"INFRASTRUCTURE\",\"resourceDescription\":\"localhost\",\"resourceEditorName\":\"Machine\",\"resourceName\":\"localhost\"}"
 		},
 		{
 			"resourceType": "MariaDB Database",

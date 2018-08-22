@@ -21,7 +21,7 @@ docker run -ti \
   /plugins application composableapplication dns domain machine mariadb unixuser webcertificate
 
 # Create release
-./create-local-release.sh
+./create-local-release-no-tests.sh
 cp build/libs/foilen-infra-resource-email-master-SNAPSHOT.jar $FOLDER_PLUGINS_JARS
 
 # Start webapp

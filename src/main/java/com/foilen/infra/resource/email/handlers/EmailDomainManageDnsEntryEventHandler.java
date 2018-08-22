@@ -9,7 +9,10 @@
  */
 package com.foilen.infra.resource.email.handlers;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.foilen.infra.plugin.v1.core.context.ChangesContext;
 import com.foilen.infra.plugin.v1.core.context.CommonServicesContext;
@@ -33,24 +36,47 @@ public class EmailDomainManageDnsEntryEventHandler extends AbstractCommonMethodU
 
         context.addManagedResourceTypes(DnsEntry.class, DnsPointer.class);
 
-        // MX (DnsEntry -> mxDomainName)
-        String mxDomainName = emailDomain.getMxDomainName();
-        if (!Strings.isNullOrEmpty(mxDomainName)) {
-            DnsEntry mxDnsEntry = new DnsEntry(emailDomain.getDomainName(), DnsEntryType.MX, mxDomainName);
-            context.addManagedResources(mxDnsEntry);
-        }
-
-        // DnsPointers -> POINTS_TO -> machines
-        DnsPointer mxDnsPointer = new DnsPointer(mxDomainName);
-        context.addManagedResources(mxDnsPointer);
+        // Get the list of machines to point to
+        List<Machine> pointToMachines = new ArrayList<>();
         List<EmailServer> emailServers = services.getResourceService().linkFindAllByFromResourceAndLinkTypeAndToResourceClass(emailDomain, LinkTypeConstants.INSTALLED_ON, EmailServer.class);
         logger.debug("Email Domain {} is installed on server {}", emailDomain, emailServers);
         emailServers.stream() //
                 .flatMap(emailServer -> services.getResourceService().linkFindAllByFromResourceAndLinkTypeAndToResourceClass(emailServer, LinkTypeConstants.INSTALLED_ON, Machine.class).stream()) //
                 .forEach(machine -> {
                     logger.debug("On machine {}", machine.getName());
-                    changes.linkAdd(mxDnsPointer, LinkTypeConstants.INSTALLED_ON, machine);
+                    pointToMachines.add(machine);
                 });
+
+        Set<String> domainNamesWithPointer = new HashSet<>();
+
+        // MX (DnsEntry -> mxDomainName)
+        String mxDomainName = emailDomain.getMxDomainName();
+        if (!Strings.isNullOrEmpty(mxDomainName) && domainNamesWithPointer.add(mxDomainName)) {
+            // DnsEntry
+            DnsEntry mxDnsEntry = new DnsEntry(emailDomain.getDomainName(), DnsEntryType.MX, mxDomainName);
+            context.addManagedResources(mxDnsEntry);
+
+            // DnsPointer -> POINTS_TO -> machines
+            DnsPointer dnsPointer = new DnsPointer(mxDomainName);
+            context.addManagedResources(dnsPointer);
+            pointToMachines.forEach(machine -> changes.linkAdd(dnsPointer, LinkTypeConstants.POINTS_TO, machine));
+        }
+
+        // imapDomainName DnsPointer
+        String imapDomainName = emailDomain.getImapDomainName();
+        if (!Strings.isNullOrEmpty(imapDomainName) && domainNamesWithPointer.add(imapDomainName)) {
+            DnsPointer dnsPointer = new DnsPointer(imapDomainName);
+            context.addManagedResources(dnsPointer);
+            pointToMachines.forEach(machine -> changes.linkAdd(dnsPointer, LinkTypeConstants.POINTS_TO, machine));
+        }
+
+        // pop3DomainName DnsPointers
+        String pop3DomainName = emailDomain.getPop3DomainName();
+        if (!Strings.isNullOrEmpty(pop3DomainName) && domainNamesWithPointer.add(pop3DomainName)) {
+            DnsPointer dnsPointer = new DnsPointer(pop3DomainName);
+            context.addManagedResources(dnsPointer);
+            pointToMachines.forEach(machine -> changes.linkAdd(dnsPointer, LinkTypeConstants.POINTS_TO, machine));
+        }
 
     }
 

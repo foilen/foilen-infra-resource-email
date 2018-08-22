@@ -1,0 +1,1987 @@
+{
+  "resources" : [ {
+    "resource" : "Application | db_server_email | ",
+    "links" : [ {
+      "type" : "INSTALLED_ON",
+      "to" : "Machine | localhost | localhost (127.0.0.1)"
+    }, {
+      "type" : "RUN_AS",
+      "to" : "UnixUser | mariadb | /home/mariadb"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "applicationDefinition" : {
+        "_nextAssetId" : 2,
+        "assetsBundles" : [ {
+          "assetsFolderPath" : "_assets_1/",
+          "assetsRelativePathAndBinaryContent" : [ ],
+          "assetsRelativePathAndTextContent" : [ {
+            "a" : "/newPass",
+            "b" : "ABC"
+          }, {
+            "a" : "/newPass.cnf",
+            "b" : "[client]
+password=ABC"
+          } ]
+        } ],
+        "assetsPathAndContent" : [ ],
+        "buildSteps" : [ {
+          "step" : "_assets_1/ /",
+          "type" : "COPY"
+        } ],
+        "containerUsersToChangeId" : [ {
+          "a" : "mysql",
+          "b" : 2002
+        } ],
+        "copyWhenStartedPathAndContentFiles" : [ {
+          "a" : "/manager-config.json",
+          "b" : "{
+  \"admin\" : {
+    \"name\" : \"root\",
+    \"password\" : \"ABC\"
+  },
+  \"databases\" : [ \"db_database_email\" ],
+  \"usersToIgnore\" : [ {
+    \"name\" : \"root\",
+    \"host\" : \"%\"
+  } ],
+  \"usersPermissions\" : [ {
+    \"name\" : \"db_user_email\",
+    \"host\" : \"%\",
+    \"password\" : \"the_password\",
+    \"databaseGrants\" : [ {
+      \"databaseName\" : \"db_database_email\",
+      \"grants\" : [ \"ALTER\", \"CREATE\", \"CREATE ROUTINE\", \"CREATE TEMPORARY TABLES\", \"CREATE VIEW\", \"DROP\", \"EVENT\", \"INDEX\", \"LOCK TABLES\", \"SHOW VIEW\", \"TRIGGER\", \"SELECT\", \"INSERT\", \"UPDATE\", \"DELETE\" ]
+    } ]
+  } ]
+}"
+        } ],
+        "environments" : { },
+        "executeWhenStartedCommands" : [ "/mariadb-update-manager.sh" ],
+        "from" : "foilen/fcloud-docker-mariadb:10.3.5-1.1.1-001",
+        "hostToIpMapping" : [ ],
+        "portsEndpoint" : {
+          "3306" : "MYSQL_TCP"
+        },
+        "portsExposed" : { },
+        "portsRedirect" : [ ],
+        "runAs" : 2002,
+        "services" : [ {
+          "command" : "/mariadb-start.sh",
+          "name" : "app"
+        } ],
+        "udpPortsExposed" : { },
+        "volumes" : [ {
+          "containerFsFolder" : "/var/lib/mysql",
+          "groupId" : 2002,
+          "hostFolder" : "/home/mariadb/mysql/db_server_email/data",
+          "ownerId" : 2002,
+          "permissions" : "770"
+        }, {
+          "containerFsFolder" : "/var/run/mysqld/",
+          "groupId" : 2002,
+          "hostFolder" : "/home/mariadb/mysql/db_server_email/run",
+          "ownerId" : 2002,
+          "permissions" : "770"
+        }, {
+          "containerFsFolder" : "/volumes/config/",
+          "groupId" : 2002,
+          "hostFolder" : "/home/mariadb/mysql/db_server_email/config",
+          "ownerId" : 2002,
+          "permissions" : "770"
+        } ]
+      },
+      "description" : "",
+      "domainNames" : [ ],
+      "executionPolicy" : "ALWAYS_ON",
+      "name" : "db_server_email",
+      "resourceCategory" : "INFRASTRUCTURE",
+      "resourceDescription" : "",
+      "resourceName" : "db_server_email"
+    }
+  }, {
+    "resource" : "Application | james_server | Apache James email server",
+    "links" : [ {
+      "type" : "INSTALLED_ON",
+      "to" : "Machine | localhost | localhost (127.0.0.1)"
+    }, {
+      "type" : "RUN_AS",
+      "to" : "UnixUser | james | /home/james"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "applicationDefinition" : {
+        "_nextAssetId" : 2,
+        "assetsBundles" : [ {
+          "assetsFolderPath" : "_assets_1/",
+          "assetsRelativePathAndBinaryContent" : [ {
+            "a" : "/james-server-app/conf/keystore-imaps",
+            "b" : ""
+          }, {
+            "a" : "/james-server-app/conf/keystore-pop3s",
+            "b" : ""
+          }, {
+            "a" : "/james-server-app/conf/keystore-smtps",
+            "b" : ""
+          } ],
+          "assetsRelativePathAndTextContent" : [ {
+            "a" : "/james-start.sh",
+            "b" : "#!/bin/bash
+
+set -e
+
+cp /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/sunjce_provider.jar /james-server-app/lib/
+
+cd /james-server-app
+./bin/james start
+
+
+PIDFILE=\"var/james.pid\"
+
+until [ -f $PIDFILE ]
+do
+	echo Waiting for $PIDFILE
+	sleep 1
+done
+
+APP_PID=$(cat $PIDFILE)
+while [ -e /proc/$APP_PID ]; do sleep 5; done
+
+echo Service is down
+"
+          }, {
+            "a" : "/james-server-app/conf/domainlist.xml",
+            "b" : "<?xml version=\"1.0\"?>
+<domainlist class=\"org.apache.james.domainlist.jpa.JPADomainList\">
+  <autodetect>false</autodetect>
+  <autodetectIP>false</autodetectIP>
+</domainlist>
+"
+          }, {
+            "a" : "/james-server-app/conf/dnsservice.xml",
+            "b" : "<?xml version=\"1.0\"?>
+<dnsservice>
+  <servers>
+  </servers>
+
+  <autodiscover>true</autodiscover>
+  <authoritative>false</authoritative>
+
+  <maxcachesize>50000</maxcachesize>
+
+</dnsservice>
+"
+          }, {
+            "a" : "/james-server-app/conf/events.xml",
+            "b" : "<?xml version=\"1.0\"?>
+
+<events>
+  <type>default</type>
+  <delivery>synchronous</delivery>
+</events>"
+          }, {
+            "a" : "/james-server-app/conf/imapserver.xml",
+            "b" : "<?xml version=\"1.0\"?>
+
+<imapservers>
+
+  <imapserver enabled=\"true\">
+
+    <jmxName>imapserver</jmxName>
+
+    <bind>0.0.0.0:10143</bind>
+
+    <connectionBacklog>200</connectionBacklog>
+    
+    <tls socketTLS=\"false\" startTLS=\"true\">
+      <keystore>file://conf/keystore-imaps</keystore>
+      <secret>james</secret>
+      <provider>org.bouncycastle.jce.provider.BouncyCastleProvider</provider>
+    </tls>
+
+    <connectionLimit>0</connectionLimit>
+    <connectionLimitPerIP>50</connectionLimitPerIP>
+
+  </imapserver>
+  
+  <imapserver enabled=\"true\">
+
+    <jmxName>imapsserver</jmxName>
+
+    <bind>0.0.0.0:10993</bind>
+
+    <connectionBacklog>200</connectionBacklog>
+
+    <tls socketTLS=\"true\" startTLS=\"false\">
+      <keystore>file://conf/keystore-imaps</keystore>
+      <secret>james</secret>
+      <provider>org.bouncycastle.jce.provider.BouncyCastleProvider</provider>
+    </tls>
+
+    <connectionLimit>0</connectionLimit>
+    <connectionLimitPerIP>50</connectionLimitPerIP>
+
+  </imapserver>
+
+</imapservers>
+"
+          }, {
+            "a" : "/james-server-app/conf/indexer.xml",
+            "b" : "<?xml version=\"1.0\"?>
+<indexer>
+  <provider>luceneIndex</provider>
+</indexer>
+"
+          }, {
+            "a" : "/james-server-app/conf/james-database.properties",
+            "b" : "database.driverClassName=org.mariadb.jdbc.Driver\r
+database.url=jdbc:mariadb://127.0.0.1:3306/db_database_email\r
+database.username=db_user_email\r
+database.password=the_password\r
+\r
+vendorAdapter.database=MYSQL\r
+\r
+openjpa.streaming=false\r
+\r
+datasource.testOnBorrow=true\r
+datasource.validationQueryTimeoutSec=2\r
+datasource.validationQuery=select 1\r
+"
+          }, {
+            "a" : "/james-server-app/conf/jmx.properties",
+            "b" : "#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  \"License\"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+#
+
+#  This template file can be used as example for James Server configuration
+#  DO NOT USE IT AS SUCH AND ADAPT IT TO YOUR NEEDS
+
+#  This template file can be used as example for James Server configuration
+#  DO NOT USE IT AS SUCH AND ADAPT IT TO YOUR NEEDS
+
+# See http://james.apache.org/server/3/config.html for usage
+
+jmx.address=127.0.0.1
+jmx.port=9999
+"
+          }, {
+            "a" : "/james-server-app/conf/lmtpserver.xml",
+            "b" : "<?xml version=\"1.0\"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one   
+  or more contributor license agreements.  See the NOTICE file 
+  distributed with this work for additional information        
+  regarding copyright ownership.  The ASF licenses this file   
+  to you under the Apache License, Version 2.0 (the            
+  \"License\"); you may not use this file except in compliance   
+  with the License.  You may obtain a copy of the License at   
+                                                               
+    http://www.apache.org/licenses/LICENSE-2.0                 
+                                                               
+  Unless required by applicable law or agreed to in writing,   
+  software distributed under the License is distributed on an  
+  \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY       
+  KIND, either express or implied.  See the License for the    
+  specific language governing permissions and limitations      
+  under the License.                                           
+ -->
+ 
+<!--
+   This template file can be used as example for James Server configuration
+   DO NOT USE IT AS SUCH AND ADAPT IT TO YOUR NEEDS
+-->
+ 
+<!-- See http://james.apache.org/server/3/config.html for usage -->
+
+<lmtpservers>
+ 
+	<!-- The LMTP server is disabled by default -->
+	<!-- Disabling blocks will stop them from listening, -->
+	<!-- but does not free as many resources as removing them would -->
+	<lmtpserver enabled=\"false\">
+	
+       <jmxName>lmtpserver</jmxName>
+
+	   <!-- LMTP should not be reachable from outside your network so bind it to loopback-->
+	   <bind>127.0.0.1:24</bind>
+	    
+	   <connectionBacklog>200</connectionBacklog>
+	      
+       <!-- This is the name used by the server to identify itself in the LMTP -->
+       <!-- protocol.  If autodetect is TRUE, the server will discover its -->
+       <!-- own host name and use that in the protocol.  If discovery fails, -->
+       <!-- the value of 'localhost' is used.  If autodetect is FALSE, James -->
+       <!-- will use the specified value. -->
+       <!--
+       <helloName autodetect=\"true\">myMailServer</helloName>
+        -->
+       <!-- connection timeout in secconds -->
+       <connectiontimeout>1200</connectiontimeout>
+      
+       <!-- Set the maximum simultaneous incoming connections for this service -->
+       <connectionLimit>0</connectionLimit>
+         
+       <!-- Set the maximum simultaneous incoming connections per IP for this service -->
+       <connectionLimitPerIP>0</connectionLimitPerIP>
+         
+       <!--  This sets the maximum allowed message size (in kilobytes) for this -->
+       <!--  LMTP service. If unspecified, the value defaults to 0, which means no limit. -->
+       <maxmessagesize>0</maxmessagesize>
+         
+        <!-- This sets the LMTPGreeting which will be used when connect to the lmtpserver -->
+        <!-- If none is specified a default is generated -->
+        <!--
+        <smtpGreeting>JAMES LMTP Server</smtpGreeting>
+         -->
+         
+       <handlerchain>
+           <!-- This loads the core CommandHandlers. Only remove this if you really -->
+           <!-- know what you are doing -->
+           <handler class=\"org.apache.james.lmtpserver.CoreCmdHandlerLoader\"/>
+       </handlerchain>
+
+	</lmtpserver>
+	
+</lmtpservers>
+"
+          }, {
+            "a" : "/james-server-app/conf/log4j.properties",
+            "b" : "log4j.rootLogger=DEBUG
+
+log4j.appender.CONS=org.apache.log4j.ConsoleAppender
+log4j.appender.CONS.layout=org.apache.log4j.PatternLayout
+log4j.appender.CONS.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.FILE=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.FILE.File=../log/james-server.log
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.MAILBOXMANAGER=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.MAILBOXMANAGER.File=../log/mailboxmanager.log
+log4j.appender.MAILBOXMANAGER.DatePattern='.'yyyy-MM-dd
+log4j.appender.MAILBOXMANAGER.layout=org.apache.log4j.PatternLayout
+log4j.appender.MAILBOXMANAGER.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.IMAPSERVER=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.IMAPSERVER.File=../log/imapserver.log
+log4j.appender.IMAPSERVER.DatePattern='.'yyyy-MM-dd
+log4j.appender.IMAPSERVER.layout=org.apache.log4j.PatternLayout
+log4j.appender.IMAPSERVER.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.MAILETCONTAINER=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.MAILETCONTAINER.File=../log/mailetcontainer.log
+log4j.appender.MAILETCONTAINER.DatePattern='.'yyyy-MM-dd
+log4j.appender.MAILETCONTAINER.layout=org.apache.log4j.PatternLayout
+log4j.appender.MAILETCONTAINER.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.DNSSERVICE=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.DNSSERVICE.File=../log/dnsservice.log
+log4j.appender.DNSSERVICE.DatePattern='.'yyyy-MM-dd
+log4j.appender.DNSSERVICE.layout=org.apache.log4j.PatternLayout
+log4j.appender.DNSSERVICE.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.POP3SERVER=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.POP3SERVER.File=../log/pop3server.log
+log4j.appender.POP3SERVER.DatePattern='.'yyyy-MM-dd
+log4j.appender.POP3SERVER.layout=org.apache.log4j.PatternLayout
+log4j.appender.POP3SERVER.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.SMTPSERVER=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.SMTPSERVER.File=../log/smtpserver.log
+log4j.appender.SMTPSERVER.DatePattern='.'yyyy-MM-dd
+log4j.appender.SMTPSERVER.layout=org.apache.log4j.PatternLayout
+log4j.appender.SMTPSERVER.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.LMTPSERVER=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.LMTPSERVER.File=../log/lmtpserver.log
+log4j.appender.LMTPSERVER.DatePattern='.'yyyy-MM-dd
+log4j.appender.LMTPSERVER.layout=org.apache.log4j.PatternLayout
+log4j.appender.LMTPSERVER.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.MAILREPOSITORYSTORE=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.MAILREPOSITORYSTORE.File=../log/mailrepositorystore.log
+log4j.appender.MAILREPOSITORYSTORE.DatePattern='.'yyyy-MM-dd
+log4j.appender.MAILREPOSITORYSTORE.layout=org.apache.log4j.PatternLayout
+log4j.appender.MAILREPOSITORYSTORE.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.USERSREPOSITORY=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.USERSREPOSITORY.File=../log/usersrepository.log
+log4j.appender.USERSREPOSITORY.DatePattern='.'yyyy-MM-dd
+log4j.appender.USERSREPOSITORY.layout=org.apache.log4j.PatternLayout
+log4j.appender.USERSREPOSITORY.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.FETCHMAIL=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.FETCHMAIL.File=../log/fetchmail.log
+log4j.appender.FETCHMAIL.DatePattern='.'yyyy-MM-dd
+log4j.appender.FETCHMAIL.layout=org.apache.log4j.PatternLayout
+log4j.appender.FETCHMAIL.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.DOMAINLIST=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.DOMAINLIST.File=../log/domainlist.log
+log4j.appender.DOMAINLIST.DatePattern='.'yyyy-MM-dd
+log4j.appender.DOMAINLIST.layout=org.apache.log4j.PatternLayout
+log4j.appender.DOMAINLIST.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.VIRTUALUSERTABLE=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.VIRTUALUSERTABLE.File=../log/virtualusertable.log
+log4j.appender.VIRTUALUSERTABLE.DatePattern='.'yyyy-MM-dd
+log4j.appender.VIRTUALUSERTABLE.layout=org.apache.log4j.PatternLayout
+log4j.appender.VIRTUALUSERTABLE.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.appender.MAILQUEUEFACTORY=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.MAILQUEUEFACTORY.File=../log/mailqueuefactory.log
+log4j.appender.MAILQUEUEFACTORY.DatePattern='.'yyyy-MM-dd
+log4j.appender.MAILQUEUEFACTORY.layout=org.apache.log4j.PatternLayout
+log4j.appender.MAILQUEUEFACTORY.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
+log4j.logger.org.apache.jackrabbit=ERROR, CONS, FILE
+
+log4j.logger.org.apache.xbean.spring=WARN, CONS, FILE
+log4j.logger.org.apache.activemq=WARN, CONS, FILE
+
+log4j.logger.org.apache.camel=WARN, CONS, FILE
+log4j.logger.org.springframework=WARN, CONS, FILE
+log4j.logger.org.apache.james=INFO, CONS, FILE
+
+log4j.logger.james=WARN, CONS, FILE
+log4j.logger=DEBUG, CONS, FILE
+
+log4j.logger.james.mailboxmanager=INFO, MAILBOXMANAGER
+log4j.logger.james.imapserver=INFO, IMAPSERVER
+log4j.logger.james.mailetcontainer=INFO, MAILETCONTAINER
+log4j.logger.james.mailetcontext=INFO, MAILETCONTAINER
+log4j.logger.james.mailspooler=INFO, MAILETCONTAINER
+log4j.logger.james.mailprocessor=INFO, MAILETCONTAINER
+log4j.logger.james.dnsservice=INFO, DNSSERVICE
+log4j.logger.james.pop3server=INFO, POP3SERVER
+log4j.logger.james.smtpserver=INFO, SMTPSERVER
+log4j.logger.james.lmtpserver=INFO, LMTPSERVER
+log4j.logger.james.mailrepositorystore=INFO, MAILREPOSITORYSTORE
+log4j.logger.james.usersrepository=INFO, USERSREPOSITORY
+log4j.logger.james.fetchmail=INFO, FETCHMAIL
+log4j.logger.james.domainlist=INFO, DOMAINLIST
+log4j.logger.james.virtualusertable=INFO, VIRTUALUSERTABLE
+log4j.logger.james.mailqueuefactory=INFO, MAILQUEUEFACTORY
+log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
+"
+          }, {
+            "a" : "/james-server-app/conf/mailbox.xml",
+            "b" : "<?xml version=\"1.0\"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one   
+  or more contributor license agreements.  See the NOTICE file 
+  distributed with this work for additional information        
+  regarding copyright ownership.  The ASF licenses this file   
+  to you under the Apache License, Version 2.0 (the            
+  \"License\"); you may not use this file except in compliance   
+  with the License.  You may obtain a copy of the License at   
+                                                               
+    http://www.apache.org/licenses/LICENSE-2.0                 
+                                                               
+  Unless required by applicable law or agreed to in writing,   
+  software distributed under the License is distributed on an  
+  \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY       
+  KIND, either express or implied.  See the License for the    
+  specific language governing permissions and limitations      
+  under the License.                                           
+ -->
+ 
+<!--
+   This template file can be used as example for James Server configuration
+   DO NOT USE IT AS SUCH AND ADAPT IT TO YOUR NEEDS
+-->
+ 
+<!-- See http://james.apache.org/server/3/config.html for usage -->
+ 
+<mailbox>
+   <!-- supported providers are: -->
+   <!-- jpa, jcr, maildir, hbase, memory -->
+   <!--  -->
+   <!-- Be aware that maildir will only work on unix like operation systems! -->
+   <provider>jpa</provider>
+</mailbox>
+"
+          }, {
+            "a" : "/james-server-app/conf/mailrepositorystore.xml",
+            "b" : "<?xml version=\"1.0\"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one   
+  or more contributor license agreements.  See the NOTICE file 
+  distributed with this work for additional information        
+  regarding copyright ownership.  The ASF licenses this file   
+  to you under the Apache License, Version 2.0 (the            
+  \"License\"); you may not use this file except in compliance   
+  with the License.  You may obtain a copy of the License at   
+                                                               
+    http://www.apache.org/licenses/LICENSE-2.0                 
+                                                               
+  Unless required by applicable law or agreed to in writing,   
+  software distributed under the License is distributed on an  
+  \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY       
+  KIND, either express or implied.  See the License for the    
+  specific language governing permissions and limitations      
+  under the License.                                           
+ -->
+
+<!--
+   This template file can be used as example for James Server configuration
+   DO NOT USE IT AS SUCH AND ADAPT IT TO YOUR NEEDS
+-->
+ 
+<!-- See http://james.apache.org/server/3/config.html for usage -->
+
+<mailrepositorystore>
+
+   <mailrepositories>
+
+       <!-- JDBC based repositories.  These repositories store all message data -->
+       <!-- in the database. -->
+       <mailrepository class=\"org.apache.james.mailrepository.jdbc.JDBCMailRepository\">
+           <protocols>
+               <protocol>db</protocol>
+           </protocols>
+           <config>
+               <sqlFile>file://conf/sqlResources.xml</sqlFile>
+               <!-- Set the size threshold for in memory handling of storing operations -->
+               <!-- Default is currently 409600000 due to a bug with mysql and binary stream -->
+               <!-- currently under investigation. Please change this only if you know what -->
+               <!-- you do. -->
+               <!--
+               <inMemorySizeLimit>4096</inMemorySizeLimit>
+                -->
+           </config>
+       </mailrepository>
+
+        <!-- File based repositories.  These repositories store all message data -->
+        <!-- in the file system. -->
+        <mailrepository class=\"org.apache.james.mailrepository.file.FileMailRepository\">
+            <protocols>
+                <protocol>file</protocol>
+            </protocols>
+            <!-- Set if the messages should be listed sorted. False by default -->
+            <config FIFO=\"false\" CACHEKEYS=\"true\"/>
+        </mailrepository>
+        
+   </mailrepositories>
+   
+</mailrepositorystore>
+"
+          }, {
+            "a" : "/james-server-app/conf/managesieveserver.xml",
+            "b" : "<?xml version=\"1.0\"?>
+
+<managesieveservers>
+
+   <managesieveserver enabled=\"false\">
+
+     <jmxName>managesieveserver</jmxName>
+
+     <!-- Configure this to bind to a specific inetaddress -->
+     <!-- Please NOTE: you should add this IP also to your RemoteAddrNotInNetwork -->
+     <!-- in order to avoid relay check for locallly generated bounces -->
+     <!-- 
+            Port 4190 is the well-known/IANA registered port for ManageSieve.
+            -->
+     <bind>0.0.0.0:4190</bind>
+
+     <connectionBacklog>200</connectionBacklog>
+
+     <!-- Set to true to support STARTTLS or TLS for the Socket.
+           To use this you need to copy sunjce_provider.jar to /path/james/lib directory.
+      -->
+     <tls socketTLS=\"false\" startTLS=\"false\">
+       <!-- To create a new keystore execute:
+        keytool -genkey -alias james -keyalg RSA -keystore /path/to/james/conf/keystore
+         -->
+       <keystore>file://conf/keystore</keystore>
+       <secret>yoursecret</secret>
+       <provider>org.bouncycastle.jce.provider.BouncyCastleProvider</provider>
+       <!-- The algorithm is optional and only needs to be specified when using something other
+        than the Sun JCE provider - You could use IbmX509 with IBM Java runtime. -->
+       <algorithm>SunX509</algorithm>
+     </tls>
+         
+        <!-- connection timeout in secconds -->
+        <connectiontimeout>360</connectiontimeout>
+
+        <!-- Set the maximum simultaneous incoming connections for this service -->
+        <connectionLimit>0</connectionLimit>
+         
+        <!-- Set the maximum simultaneous incoming connections per IP for this service -->
+        <connectionLimitPerIP>0</connectionLimitPerIP>
+
+        <!--  Uncomment this if you want to verify sender addresses, ensuring that -->
+        <!--  the sender address matches the user who has authenticated. -->
+        <!--  This prevents a user of your mail server from acting as someone else -->
+        <!--  If unspecified, default value is true -->
+        <!--
+        <verifyIdentity>true</verifyIdentity>
+         -->
+
+        <!--  This sets the maximum allowed message size (in kilobytes) for this -->
+        <!--  ManageSieve service. If unspecified, the value defaults to 0, which means no limit. -->
+        <maxmessagesize>0</maxmessagesize>
+         
+        <!--  This sets wether to enforce the use of HELO/EHLO salutation before a -->
+        <!--  MAIL command is accepted. If unspecified, the value defaults to true -->
+        <!-- 
+        <heloEhloEnforcement>true</heloEhloEnforcement>
+         -->
+         
+        <!-- WARNING: This is Non-RFC compliant (default value: true) -->
+        <!-- See: http://wiki.apache.org/james/StandardsComplianceStatement -->
+        <addressBracketsEnforcement>true</addressBracketsEnforcement>
+  
+   </managesieveserver>
+
+</managesieveservers>
+
+
+"
+          }, {
+            "a" : "/james-server-app/conf/pop3server.xml",
+            "b" : "<?xml version=\"1.0\"?>
+
+<pop3servers>
+
+	<!-- The POP3 server is enabled by default -->
+	<!-- Disabling blocks will stop them from listening, -->
+	<!-- but does not free as many resources as removing them would -->
+	<pop3server enabled=\"true\">
+	
+	   <jmxName>pop3server</jmxName>
+	
+	   <!-- Configure this to bind to a specific inetaddress -->
+	   <!-- port 995 is the well-known/IANA registered port for POP3S  ie over SSL/TLS -->
+	   <!-- port 110 is the well-known/IANA registered port for Standard POP3 -->
+	   <bind>0.0.0.0:10110</bind>
+	
+	   <connectionBacklog>200</connectionBacklog>
+	
+	   <!-- Set to true to support STARTTLS or SSL for the Socket.
+	         To use this you need to copy sunjce_provider.jar to /path/james/lib directory.
+	    -->
+	   <tls socketTLS=\"false\" startTLS=\"true\">
+	       <!-- To create a new keystore execute:
+	             keytool -genkey -alias james -keyalg RSA -keystore /path/to/james/conf/keystore
+	        -->
+	       <keystore>file://conf/keystore-pop3s</keystore>
+	       <secret>james</secret>
+	       <provider>org.bouncycastle.jce.provider.BouncyCastleProvider</provider>
+	   </tls>
+	      
+       <!-- This is the name used by the server to identify itself in the POP3 -->
+       <!-- protocol.  If autodetect is TRUE, the server will discover its -->
+       <!-- own host name and use that in the protocol.  If discovery fails, -->
+       <!-- the value of 'localhost' is used.  If autodetect is FALSE, James -->
+       <!-- will use the specified value. -->
+       <!--
+       <helloName autodetect=\"true\">myMailServer</helloName>
+        -->
+       <!-- connection timeout in secconds -->
+       <connectiontimeout>1200</connectiontimeout>
+      
+       <!-- Set the maximum simultaneous incoming connections for this service -->
+       <connectionLimit>0</connectionLimit>
+         
+       <!-- Set the maximum simultaneous incoming connections per IP for this service -->
+       <connectionLimitPerIP>50</connectionLimitPerIP>
+         
+       <handlerchain>
+           <!-- This loads the core CommandHandlers. Only remove this if you really -->
+           <!-- know what you are doing -->
+           <handler class=\"org.apache.james.pop3server.core.CoreCmdHandlerLoader\"/>
+       </handlerchain>
+	    
+	</pop3server>
+	
+</pop3servers>
+"
+          }, {
+            "a" : "/james-server-app/conf/quota.xml",
+            "b" : "<?xml version=\"1.0\"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  \"License\"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+ -->
+
+<!--
+   This template file can be used as example for James Server configuration
+   DO NOT USE IT AS SUCH AND ADAPT IT TO YOUR NEEDS
+-->
+
+<!-- See http://james.apache.org/server/3/config.html for usage -->
+
+<!--
+        This configuration file allows you to customize the way quota are handled on this server.
+        You need to rename it in quota.xml so that it gets interpreted by James on startup.
+
+        The different configuration options are detailed here.
+
+        Read RFC-2087 for full details.
+-->
+
+<quota>
+    <!--
+        Quota implementation is based on several components:
+          - QuotaRootResolver: In regard of quota management, mailboxes forms abstract groups called QUOTA ROOT. This
+          component finds to which QUOTA ROOT a mailbox belongs
+          - Current quota manager: Counters for current values: how many messages belongs to this quota root ? Which
+          size ?
+          - Max Quota manager: Sets a maximum value QUOTA ROOT resources can not exceed.
+          - QuotaManager: assemble Current quota manager and Max quota manager.
+          - Listening quota updater: Event system based quota update. On each APPED / COPY /EXPUNGE command, current
+          quotas gets updated.
+    -->
+
+    <quotaRootResolver>
+        <!--
+        Possible value:
+         - default
+        -->
+        <provider>default</provider>
+    </quotaRootResolver>
+    <currentQuotaManager>
+        <!--
+        Possible value for provider:
+         - none: when you use fake as a value for quotaManager's provider
+         - inmemory
+         - cassandra
+         - jpa
+
+        The inmemory implementation:
+         - Does not work in a distributed context
+        Note that quota need to be (lazy) re-calculated after each starts
+
+        Cassandra implementation.
+        Non existing quota are considered as null. No cache. It needs to be always enabled, or you might get some
+        quota synchronisation issues.
+         -->
+        <provider>none</provider>
+    </currentQuotaManager>
+    <maxQuotaManager>
+        <!--
+        This component is exposed to the CLI for quota administration tasks.
+
+        Possible value are:
+         - fake: will always return UNLIMITED. Throws on modifications.
+         - fixed: all QUOTA ROOT get the same upper bound for their quotas.
+         - inmemory: allows you to define QUOTA ROOT specific limits, backed with a fixed policy. It does not
+         work in a distributed context.
+         - cassandra: Same thing than inmemory but backed on cassandra. Works on a distributed context. Note that using
+         the default* configuration options and the CLI to set default options is dangerous as server startup might override
+         CLI values.
+         - jpa: Same thing than inmemory but backed on jpa. Works on a distributed context. Note that using
+         the default* configuration options and the CLI to set default options is dangerous as server startup might override
+         CLI values.
+        -->
+        <provider>fake</provider>
+        <!--
+        Configuration option for setting max policies for MaxQuotaManager ( message count and byte )
+        -->
+        <!--
+        <defaultMaxMessage>100000</defaultMaxMessage>
+        <defaultMaxStorage>5368709120</defaultMaxStorage>
+        -->
+        <!--
+        Configuration option for setting max values per quota root ( message count and byte )
+        -->
+        <!--
+        <maxMessage>
+            <quotaRoot>#private&amp;btellier@apache.org</quotaRoot>
+            <value>200000</value>
+        </maxMessage>
+        <maxStorage>
+            <quotaRoot>#private&amp;btellier@apache.org</quotaRoot>
+            <value>10737418240</value>
+        </maxStorage>
+        -->
+    </maxQuotaManager>
+    <quotaManager>
+        <!--
+        The QuotaManager you use.
+
+        Possible values are:
+         - fake: returns only UNKNOWN/UNLIMITED quotas
+         - store: returns quotas using a CurrentQuotaManager and a MaxQuotaManager
+        -->
+        <provider>fake</provider>
+    </quotaManager>
+    <updates>
+        <!--
+        This defines the way your quotas gets updated.
+        Possible values are:
+         - fake
+         - event
+        -->
+        <provider>fake</provider>
+    </updates>
+</quota>"
+          }, {
+            "a" : "/james-server-app/conf/recipientrewritetable.xml",
+            "b" : "<?xml version=\"1.0\"?>
+<recipientrewritetable class=\"org.apache.james.rrt.jpa.JPARecipientRewriteTable\">
+   <recursiveMapping>true</recursiveMapping>
+   <mappingLimit>10</mappingLimit>
+</recipientrewritetable>
+
+"
+          }, {
+            "a" : "/james-server-app/conf/sieverepository.xml",
+            "b" : "<?xml version=\"1.0\"?>
+<sieverepository class=\"org.apache.james.sieverepository.file.SieveFileRepository\">
+</sieverepository>
+"
+          }, {
+            "a" : "/james-server-app/conf/smtpserver.xml",
+            "b" : "<?xml version=\"1.0\"?>
+<smtpservers>
+
+  <smtpserver enabled=\"true\">
+
+    <jmxName>smtpserver</jmxName>
+
+    <bind>0.0.0.0:10025</bind>
+
+    <connectionBacklog>200</connectionBacklog>
+
+    <tls socketTLS=\"false\" startTLS=\"true\">
+      <keystore>file://conf/keystore-smtps</keystore>
+      <secret>james</secret>
+      <provider>org.bouncycastle.jce.provider.BouncyCastleProvider</provider>
+      <algorithm>SunX509</algorithm>
+    </tls>
+
+    <connectiontimeout>360</connectiontimeout>
+    <connectionLimit>0</connectionLimit>
+    <connectionLimitPerIP>50</connectionLimitPerIP>
+    <verifyIdentity>true</verifyIdentity>
+    <maxmessagesize>25000</maxmessagesize><!-- 25MB -->
+    <addressBracketsEnforcement>true</addressBracketsEnforcement>
+
+    <handlerchain>
+      <handler class=\"com.foilen.james.components.handler.fastfail.ValidRcptHandler\" />
+      <handler class=\"org.apache.james.smtpserver.CoreCmdHandlerLoader\" />
+    </handlerchain>
+  </smtpserver>
+
+
+  <smtpserver enabled=\"true\">
+
+    <jmxName>smtpserver-authenticated</jmxName>
+
+    <bind>0.0.0.0:10587</bind>
+
+    <connectionBacklog>200</connectionBacklog>
+
+    <tls socketTLS=\"false\" startTLS=\"true\">
+      <keystore>file://conf/keystore-smtps</keystore>
+      <secret>james</secret>
+      <provider>org.bouncycastle.jce.provider.BouncyCastleProvider</provider>
+      <algorithm>SunX509</algorithm>
+    </tls>
+    <connectiontimeout>360</connectiontimeout>
+    <connectionLimit>0</connectionLimit>
+    <connectionLimitPerIP>50</connectionLimitPerIP>
+
+    <authRequired>true</authRequired>
+    <authorizedAddresses>127.0.0.0/8</authorizedAddresses>
+
+    <verifyIdentity>true</verifyIdentity>
+    <maxmessagesize>25000</maxmessagesize><!-- 25MB -->
+    <addressBracketsEnforcement>true</addressBracketsEnforcement>
+
+    <handlerchain>
+      <handler class=\"com.foilen.james.components.handler.fastfail.ValidRcptHandler\" />
+      <handler class=\"org.apache.james.smtpserver.CoreCmdHandlerLoader\" />
+    </handlerchain>
+  </smtpserver>
+
+</smtpservers>
+
+
+"
+          }, {
+            "a" : "/james-server-app/conf/usersrepository.xml",
+            "b" : "<?xml version=\"1.0\"?>
+<usersrepository name=\"LocalUsers\" class=\"org.apache.james.user.jpa.JPAUsersRepository\">
+  <algorithm>SHA-512</algorithm>
+  <enableVirtualHosting>true</enableVirtualHosting>
+</usersrepository>
+"
+          }, {
+            "a" : "/james-server-app/conf/mailetcontainer.xml",
+            "b" : "<?xml version=\"1.0\"?>
+
+<!-- See http://james.apache.org/server/3/config.html for usage -->
+
+<mailetcontainer enableJmx=\"true\">
+
+  <context>
+    <postmaster>a1@example.com</postmaster>
+  </context>
+
+  <spooler>
+    <threads>20</threads>
+  </spooler>
+
+  <processors>
+
+
+    <processor state=\"root\" enableJmx=\"true\">
+    
+      <mailet match=\"All\" class=\"PostmasterAlias\" />
+      <mailet match=\"All\" class=\"RecipientToLowerCase\" />
+      <mailet match=\"RelayLimit=30\" class=\"Null\" />
+
+      <mailet match=\"HasMailAttribute=spamChecked\" class=\"ToProcessor\">
+        <processor>transport</processor>
+      </mailet>
+
+      <mailet match=\"All\" class=\"SetMailAttribute\">
+        <spamChecked>true</spamChecked>
+      </mailet>
+
+      <mailet match=\"All\" class=\"ToProcessor\">
+        <processor>transport</processor>
+      </mailet>
+
+    </processor>
+
+    <processor state=\"error\" enableJmx=\"true\">
+    
+      <mailet match=\"All\" class=\"NotifyPostmaster\">
+        <sender>unaltered</sender>
+        <attachError>true</attachError>
+        <prefix>[ERROR]</prefix>
+        <passThrough>false</passThrough>
+        <to>postmaster</to>
+        <debug>true</debug>
+      </mailet>
+      
+    </processor>
+
+
+    <processor state=\"transport\" enableJmx=\"true\">
+    
+      <!-- Add some headers -->
+      <mailet match=\"SMTPAuthSuccessful\" class=\"SetMimeHeader\">
+        <name>X-UserIsAuth</name>
+        <value>true</value>
+      </mailet>
+
+      <mailet match=\"HasMailAttribute=org.apache.james.SMIMECheckSignature\" class=\"SetMimeHeader\">
+        <name>X-WasSigned</name>
+        <value>true</value>
+      </mailet>
+      
+      <!-- Check recipient's redirections -->
+      <mailet match=\"All\" class=\"com.foilen.james.components.mailet.ExactAndCatchAllRedirections\">
+      	<cacheMaxTimeInSeconds>10</cacheMaxTimeInSeconds>
+      	<cacheMaxEntries>1000</cacheMaxEntries>
+      </mailet>
+
+      <!-- Local delivery -->
+      <mailet match=\"RecipientIsLocal\" class=\"AddDeliveredToHeader\" />
+      <mailet match=\"RecipientIsLocal\" class=\"LocalDelivery\" />
+
+      <!-- Local delivery - The domain is managed locally, but the local mailbox does not exist -->
+      <mailet match=\"HostIsLocal\" class=\"ToProcessor\">
+        <processor>local-address-error</processor>
+        <notice>550 - Requested action not taken: no such user here</notice>
+      </mailet>
+
+      <!-- Is a user and needs to relay his emails -->
+      <mailet match=\"SentByMailet\" class=\"ToProcessor\">
+      	<processor>auth-user-relay</processor>
+      </mailet>
+      <mailet match=\"com.foilen.james.components.matcher.SenderIsLocalAndSameAsSMTPAuth\" class=\"ToProcessor\">
+      	<processor>auth-user-relay</processor>
+      </mailet>
+
+      <!-- Not an open relay -->
+      <mailet match=\"All\" class=\"ToProcessor\">
+        <processor>relay-denied</processor>
+        <notice>550 - Requested action not taken: relaying denied</notice>
+      </mailet>
+
+    </processor>
+
+
+    <processor state=\"auth-user-relay\" enableJmx=\"true\">
+    
+      <!-- Relay emails per domain to different gateways -->
+      
+        <mailet match=\"SenderIsRegex=(.*)@example.com\" class=\"RemoteDelivery\">
+          <outgoingQueue>outgoing</outgoingQueue>
+    
+          <delayTime>5000, 100000, 500000</delayTime>
+          <maxRetries>25</maxRetries>
+          <maxDnsProblemRetries>0</maxDnsProblemRetries>
+          <deliveryThreads>10</deliveryThreads>
+          <sendpartial>true</sendpartial>
+          <bounceProcessor>bounces</bounceProcessor>
+          <gateway>relay.example.com</gateway>
+          <gatewayPort>587</gatewayPort>
+          <gatewayUsername>AAA</gatewayUsername>
+          <gatewayPassword>BBB</gatewayPassword>
+        </mailet>
+      
+      <!-- Relay -->
+      <mailet match=\"All\" class=\"RemoteDelivery\">
+        <outgoingQueue>outgoing</outgoingQueue>
+
+        <delayTime>5000, 100000, 500000</delayTime>
+        <maxRetries>25</maxRetries>
+        <maxDnsProblemRetries>0</maxDnsProblemRetries>
+        <deliveryThreads>10</deliveryThreads>
+        <sendpartial>true</sendpartial>
+        <bounceProcessor>bounces</bounceProcessor>
+      </mailet>
+
+    </processor>
+
+    
+    <processor state=\"spam\" enableJmx=\"true\">
+    
+      <mailet match=\"RecipientIsLocal\" class=\"ToRecipientFolder\">
+        <folder>SPAM</folder>
+        <consume>true</consume>
+      </mailet>
+      
+    </processor>
+
+
+    <processor state=\"virus\" enableJmx=\"true\">
+    
+      <mailet match=\"All\" class=\"NotifyPostmaster\">
+        <sender>unaltered</sender>
+        <attachError>true</attachError>
+        <prefix>[VIRUS]</prefix>
+        <passThrough>true</passThrough>
+        <to>postmaster</to>
+        <debug>true</debug>
+      </mailet>
+    
+      <mailet match=\"All\" class=\"SetMailAttribute\">
+        <org.apache.james.infected>true, bouncing</org.apache.james.infected>
+      </mailet>
+
+      <mailet match=\"SMTPAuthSuccessful\" class=\"Bounce\">
+        <inline>heads</inline>
+        <attachment>none</attachment>
+        <notice>Warning: We were unable to deliver the message below because it was found infected by virus(es).</notice>
+      </mailet>
+
+      <mailet match=\"All\" class=\"Null\" />
+      
+    </processor>
+
+
+    <processor state=\"local-address-error\" enableJmx=\"true\">
+    
+      <mailet match=\"All\" class=\"NotifyPostmaster\">
+        <sender>unaltered</sender>
+        <attachError>true</attachError>
+        <prefix>[LOCAL ADDRESS ERROR]</prefix>
+        <passThrough>true</passThrough>
+        <to>postmaster</to>
+        <debug>true</debug>
+      </mailet>
+      
+      <mailet match=\"All\" class=\"Bounce\">
+        <attachment>none</attachment>
+      </mailet>
+      
+    </processor>
+
+
+    <processor state=\"relay-denied\" enableJmx=\"true\">
+    
+      <mailet match=\"All\" class=\"NotifyPostmaster\">
+        <sender>unaltered</sender>
+        <attachError>true</attachError>
+        <prefix>[RELAY-DENIED]</prefix>
+        <passThrough>false</passThrough>
+        <to>postmaster</to>
+        <debug>true</debug>
+      </mailet>
+      
+    </processor>
+
+
+    <processor state=\"bounces\" enableJmx=\"true\">
+    
+      <mailet match=\"All\" class=\"NotifyPostmaster\">
+        <sender>unaltered</sender>
+        <attachError>true</attachError>
+        <prefix>[BOUNCE]</prefix>
+        <passThrough>true</passThrough>
+        <to>postmaster</to>
+        <debug>true</debug>
+      </mailet>
+      
+      <mailet match=\"All\" class=\"DSNBounce\">
+        <passThrough>false</passThrough>
+      </mailet>
+      
+    </processor>
+
+  </processors>
+
+</mailetcontainer>
+"
+          } ]
+        } ],
+        "assetsPathAndContent" : [ ],
+        "buildSteps" : [ {
+          "step" : "_assets_1/ /",
+          "type" : "COPY"
+        }, {
+          "step" : "chmod 755 /james-start.sh && chown james:james -R /james-server-app/",
+          "type" : "COMMAND"
+        } ],
+        "containerUsersToChangeId" : [ {
+          "a" : "james",
+          "b" : 2001
+        } ],
+        "copyWhenStartedPathAndContentFiles" : [ {
+          "a" : "/emailManagerConfig.json",
+          "b" : "{
+  \"database\" : {
+    \"hostname\" : \"127.0.0.1\",
+    \"port\" : 3306,
+    \"database\" : \"db_database_email\",
+    \"username\" : \"db_user_email\",
+    \"password\" : \"the_password\"
+  },
+  \"domains\" : [ \"example.com\" ],
+  \"accounts\" : [ {
+    \"email\" : \"a1@example.com\",
+    \"passwordSha512\" : \"0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8\"
+  }, {
+    \"email\" : \"a2@example.com\",
+    \"passwordSha512\" : \"0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8\"
+  }, {
+    \"email\" : \"a3@example.com\",
+    \"passwordSha512\" : \"0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8\"
+  }, {
+    \"email\" : \"a4@example.com\",
+    \"passwordSha512\" : \"0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8\"
+  }, {
+    \"email\" : \"any@example.com\",
+    \"passwordSha512\" : \"0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8\"
+  } ],
+  \"redirections\" : [ {
+    \"email\" : \"*@example.com\",
+    \"redirectTos\" : [ \"any@example.com\" ]
+  }, {
+    \"email\" : \"r1@example.com\",
+    \"redirectTos\" : [ \"a1@example.com\", \"a2@example.com\" ]
+  } ]
+}"
+        } ],
+        "environments" : { },
+        "executeWhenStartedCommands" : [ ],
+        "from" : "foilen/fcloud-docker-email:3.1.0-871d10-1",
+        "hostToIpMapping" : [ ],
+        "portsEndpoint" : {
+          "10025" : "SMTP_TCP"
+        },
+        "portsExposed" : {
+          "25" : 10025,
+          "587" : 10587,
+          "143" : 10143,
+          "110" : 10110
+        },
+        "portsRedirect" : [ {
+          "localPort" : 3306,
+          "machineContainerEndpoint" : "localhost/db_server_email/MYSQL_TCP",
+          "toContainerName" : "db_server_email",
+          "toEndpoint" : "MYSQL_TCP",
+          "toLocalMachine" : true,
+          "toMachine" : "localhost"
+        } ],
+        "runAs" : 2001,
+        "services" : [ {
+          "command" : "/james-start.sh",
+          "name" : "james"
+        }, {
+          "command" : "/opt/james-manager/bin/james-manager --configFile /emailManagerConfig.json",
+          "name" : "james-manager"
+        } ],
+        "udpPortsExposed" : { },
+        "volumes" : [ ]
+      },
+      "description" : "Apache James email server",
+      "domainNames" : [ ],
+      "executionPolicy" : "ALWAYS_ON",
+      "name" : "james_server",
+      "resourceCategory" : "INFRASTRUCTURE",
+      "resourceDescription" : "Apache James email server",
+      "resourceName" : "james_server"
+    }
+  }, {
+    "resource" : "AttachableMariaDB | db_database_email | Local infra to a MariaDB Database",
+    "links" : [ {
+      "type" : "POINTS_TO",
+      "to" : "MariaDBServer | db_server_email | "
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "localPort" : 3306,
+      "name" : "db_database_email",
+      "resourceCategory" : "DATABASE",
+      "resourceDescription" : "Local infra to a MariaDB Database",
+      "resourceEditorName" : "Attachable MariaDB",
+      "resourceName" : "db_database_email"
+    }
+  }, {
+    "resource" : "DnsEntry | example.com / MX | mail.example.com",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "Domain | example.com | Domain for example.com"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "details" : "mail.example.com",
+      "name" : "example.com",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "mail.example.com",
+      "resourceName" : "example.com / MX",
+      "type" : "MX"
+    }
+  }, {
+    "resource" : "DnsEntry | imap.example.com / A | 127.0.0.1",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "Domain | imap.example.com | Domain for imap.example.com"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "details" : "127.0.0.1",
+      "name" : "imap.example.com",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "127.0.0.1",
+      "resourceName" : "imap.example.com / A",
+      "type" : "A"
+    }
+  }, {
+    "resource" : "DnsEntry | localhost / A | 127.0.0.1",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "Domain | localhost | Domain for localhost"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "details" : "127.0.0.1",
+      "name" : "localhost",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "127.0.0.1",
+      "resourceName" : "localhost / A",
+      "type" : "A"
+    }
+  }, {
+    "resource" : "DnsEntry | mail.example.com / A | 127.0.0.1",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "Domain | mail.example.com | Domain for mail.example.com"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "details" : "127.0.0.1",
+      "name" : "mail.example.com",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "127.0.0.1",
+      "resourceName" : "mail.example.com / A",
+      "type" : "A"
+    }
+  }, {
+    "resource" : "DnsEntry | pop3.example.com / A | 127.0.0.1",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "Domain | pop3.example.com | Domain for pop3.example.com"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "details" : "127.0.0.1",
+      "name" : "pop3.example.com",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "127.0.0.1",
+      "resourceName" : "pop3.example.com / A",
+      "type" : "A"
+    }
+  }, {
+    "resource" : "DnsPointer | imap.example.com | imap.example.com",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "DnsEntry | imap.example.com / A | 127.0.0.1"
+    }, {
+      "type" : "POINTS_TO",
+      "to" : "Machine | localhost | localhost (127.0.0.1)"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "name" : "imap.example.com",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "imap.example.com",
+      "resourceName" : "imap.example.com"
+    }
+  }, {
+    "resource" : "DnsPointer | mail.example.com | mail.example.com",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "DnsEntry | mail.example.com / A | 127.0.0.1"
+    }, {
+      "type" : "POINTS_TO",
+      "to" : "Machine | localhost | localhost (127.0.0.1)"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "name" : "mail.example.com",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "mail.example.com",
+      "resourceName" : "mail.example.com"
+    }
+  }, {
+    "resource" : "DnsPointer | pop3.example.com | pop3.example.com",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "DnsEntry | pop3.example.com / A | 127.0.0.1"
+    }, {
+      "type" : "POINTS_TO",
+      "to" : "Machine | localhost | localhost (127.0.0.1)"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "name" : "pop3.example.com",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "pop3.example.com",
+      "resourceName" : "pop3.example.com"
+    }
+  }, {
+    "resource" : "Domain | example.com | Domain for example.com",
+    "links" : [ ],
+    "tags" : [ ],
+    "content" : {
+      "name" : "example.com",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "Domain for example.com",
+      "resourceName" : "example.com",
+      "reverseName" : "com.example"
+    }
+  }, {
+    "resource" : "Domain | imap.example.com | Domain for imap.example.com",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "Domain | example.com | Domain for example.com"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "name" : "imap.example.com",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "Domain for imap.example.com",
+      "resourceName" : "imap.example.com",
+      "reverseName" : "com.example.imap"
+    }
+  }, {
+    "resource" : "Domain | localhost | Domain for localhost",
+    "links" : [ ],
+    "tags" : [ ],
+    "content" : {
+      "name" : "localhost",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "Domain for localhost",
+      "resourceName" : "localhost",
+      "reverseName" : "localhost"
+    }
+  }, {
+    "resource" : "Domain | mail.example.com | Domain for mail.example.com",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "Domain | example.com | Domain for example.com"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "name" : "mail.example.com",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "Domain for mail.example.com",
+      "resourceName" : "mail.example.com",
+      "reverseName" : "com.example.mail"
+    }
+  }, {
+    "resource" : "Domain | pop3.example.com | Domain for pop3.example.com",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "Domain | example.com | Domain for example.com"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "name" : "pop3.example.com",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "Domain for pop3.example.com",
+      "resourceName" : "pop3.example.com",
+      "reverseName" : "com.example.pop3"
+    }
+  }, {
+    "resource" : "EmailAccount | a1 | Email Domain",
+    "links" : [ {
+      "type" : "INSTALLED_ON",
+      "to" : "EmailDomain | example.com | Email Domain"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "accountName" : "a1",
+      "resourceCategory" : "EMAIL",
+      "resourceDescription" : "Email Domain",
+      "resourceEditorName" : "Email Account",
+      "resourceName" : "a1",
+      "sha512Password" : "0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8",
+      "uid" : "73UEG0v7nw"
+    }
+  }, {
+    "resource" : "EmailAccount | a2 | Email Domain",
+    "links" : [ {
+      "type" : "INSTALLED_ON",
+      "to" : "EmailDomain | example.com | Email Domain"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "accountName" : "a2",
+      "resourceCategory" : "EMAIL",
+      "resourceDescription" : "Email Domain",
+      "resourceEditorName" : "Email Account",
+      "resourceName" : "a2",
+      "sha512Password" : "0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8",
+      "uid" : "GOAFqspNow"
+    }
+  }, {
+    "resource" : "EmailAccount | a3 | Email Domain",
+    "links" : [ {
+      "type" : "INSTALLED_ON",
+      "to" : "EmailDomain | example.com | Email Domain"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "accountName" : "a3",
+      "resourceCategory" : "EMAIL",
+      "resourceDescription" : "Email Domain",
+      "resourceEditorName" : "Email Account",
+      "resourceName" : "a3",
+      "sha512Password" : "0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8",
+      "uid" : "pIxmZ6dZ5A"
+    }
+  }, {
+    "resource" : "EmailAccount | a4 | Email Domain",
+    "links" : [ {
+      "type" : "INSTALLED_ON",
+      "to" : "EmailDomain | example.com | Email Domain"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "accountName" : "a4",
+      "resourceCategory" : "EMAIL",
+      "resourceDescription" : "Email Domain",
+      "resourceEditorName" : "Email Account",
+      "resourceName" : "a4",
+      "sha512Password" : "0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8",
+      "uid" : "mLP4pstR/A"
+    }
+  }, {
+    "resource" : "EmailAccount | any | Email Domain",
+    "links" : [ {
+      "type" : "INSTALLED_ON",
+      "to" : "EmailDomain | example.com | Email Domain"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "accountName" : "any",
+      "resourceCategory" : "EMAIL",
+      "resourceDescription" : "Email Domain",
+      "resourceEditorName" : "Email Account",
+      "resourceName" : "any",
+      "sha512Password" : "0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8",
+      "uid" : "ca/d4iPS1Q"
+    }
+  }, {
+    "resource" : "EmailDomain | example.com | Email Domain",
+    "links" : [ {
+      "type" : "INSTALLED_ON",
+      "to" : "JamesEmailServer | james_server | Apache James email server"
+    }, {
+      "type" : "MANAGES",
+      "to" : "DnsEntry | example.com / MX | mail.example.com"
+    }, {
+      "type" : "MANAGES",
+      "to" : "DnsPointer | imap.example.com | imap.example.com"
+    }, {
+      "type" : "MANAGES",
+      "to" : "DnsPointer | mail.example.com | mail.example.com"
+    }, {
+      "type" : "MANAGES",
+      "to" : "DnsPointer | pop3.example.com | pop3.example.com"
+    }, {
+      "type" : "MANAGES",
+      "to" : "Domain | example.com | Domain for example.com"
+    }, {
+      "type" : "MANAGES",
+      "to" : "Domain | imap.example.com | Domain for imap.example.com"
+    }, {
+      "type" : "MANAGES",
+      "to" : "Domain | pop3.example.com | Domain for pop3.example.com"
+    }, {
+      "type" : "SEND_THROUGHT",
+      "to" : "EmailRelay | example-relay | Email Relay"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "domainName" : "example.com",
+      "imapDomainName" : "imap.example.com",
+      "mxDomainName" : "mail.example.com",
+      "pop3DomainName" : "pop3.example.com",
+      "resourceCategory" : "EMAIL",
+      "resourceDescription" : "Email Domain",
+      "resourceEditorName" : "Email Domain",
+      "resourceName" : "example.com"
+    }
+  }, {
+    "resource" : "EmailRedirection |  | Email Domain",
+    "links" : [ {
+      "type" : "INSTALLED_ON",
+      "to" : "EmailDomain | example.com | Email Domain"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "accountName" : "",
+      "redirectTos" : [ "any@example.com" ],
+      "resourceCategory" : "EMAIL",
+      "resourceDescription" : "Email Domain",
+      "resourceEditorName" : "Email Redirection",
+      "resourceName" : "",
+      "uid" : "X9jXEYBc4Q"
+    }
+  }, {
+    "resource" : "EmailRedirection | r1 | Email Domain",
+    "links" : [ {
+      "type" : "INSTALLED_ON",
+      "to" : "EmailDomain | example.com | Email Domain"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "accountName" : "r1",
+      "redirectTos" : [ "a2@example.com", "a1@example.com" ],
+      "resourceCategory" : "EMAIL",
+      "resourceDescription" : "Email Domain",
+      "resourceEditorName" : "Email Redirection",
+      "resourceName" : "r1",
+      "uid" : "rbXfHd5YsA"
+    }
+  }, {
+    "resource" : "EmailRelay | example-relay | Email Relay",
+    "links" : [ ],
+    "tags" : [ ],
+    "content" : {
+      "hostname" : "relay.example.com",
+      "name" : "example-relay",
+      "password" : "BBB",
+      "port" : 587,
+      "resourceCategory" : "EMAIL",
+      "resourceDescription" : "Email Relay",
+      "resourceEditorName" : "Email Relay",
+      "resourceName" : "example-relay",
+      "username" : "AAA"
+    }
+  }, {
+    "resource" : "JamesEmailServer | james_server | Apache James email server",
+    "links" : [ {
+      "type" : "ATTACHED",
+      "to" : "AttachableMariaDB | db_database_email | Local infra to a MariaDB Database"
+    }, {
+      "type" : "INSTALLED_ON",
+      "to" : "Machine | localhost | localhost (127.0.0.1)"
+    }, {
+      "type" : "MANAGES",
+      "to" : "Application | james_server | Apache James email server"
+    }, {
+      "type" : "RUN_AS",
+      "to" : "UnixUser | james | /home/james"
+    }, {
+      "type" : "USES",
+      "to" : "MariaDBDatabase | db_database_email | "
+    }, {
+      "type" : "USES",
+      "to" : "MariaDBUser | db_user_email | "
+    }, {
+      "type" : "USES_IMAP",
+      "to" : "WebsiteCertificate | mail.example.com | f890dc9be9a6b5116de69f1ed649b5524b92a4ef, 2018-05-04, 2018-06-04"
+    }, {
+      "type" : "USES_POP3",
+      "to" : "WebsiteCertificate | mail.example.com | f890dc9be9a6b5116de69f1ed649b5524b92a4ef, 2018-05-04, 2018-06-04"
+    }, {
+      "type" : "USES_SMTP",
+      "to" : "WebsiteCertificate | example.com | 28247946f93580251ab809d91797275c54851d05, 2018-05-04, 2018-06-04"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "name" : "james_server",
+      "postmasterEmail" : "a1@example.com",
+      "resourceCategory" : "EMAIL",
+      "resourceDescription" : "Apache James email server",
+      "resourceEditorName" : "James Email Server",
+      "resourceName" : "james_server"
+    }
+  }, {
+    "resource" : "Machine | localhost | localhost (127.0.0.1)",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "DnsEntry | localhost / A | 127.0.0.1"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "name" : "localhost",
+      "publicIp" : "127.0.0.1",
+      "resourceCategory" : "INFRASTRUCTURE",
+      "resourceDescription" : "localhost (127.0.0.1)",
+      "resourceEditorName" : "Machine",
+      "resourceName" : "localhost"
+    }
+  }, {
+    "resource" : "MariaDBDatabase | db_database_email | ",
+    "links" : [ {
+      "type" : "INSTALLED_ON",
+      "to" : "MariaDBServer | db_server_email | "
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "description" : "",
+      "name" : "db_database_email",
+      "resourceCategory" : "DATABASE",
+      "resourceDescription" : "",
+      "resourceEditorName" : "MariaDB Database",
+      "resourceName" : "db_database_email"
+    }
+  }, {
+    "resource" : "MariaDBServer | db_server_email | ",
+    "links" : [ {
+      "type" : "INSTALLED_ON",
+      "to" : "Machine | localhost | localhost (127.0.0.1)"
+    }, {
+      "type" : "MANAGES",
+      "to" : "Application | db_server_email | "
+    }, {
+      "type" : "RUN_AS",
+      "to" : "UnixUser | mariadb | /home/mariadb"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "description" : "",
+      "name" : "db_server_email",
+      "resourceCategory" : "DATABASE",
+      "resourceDescription" : "",
+      "resourceEditorName" : "MariaDB Server",
+      "resourceName" : "db_server_email",
+      "rootPassword" : "ABC"
+    }
+  }, {
+    "resource" : "MariaDBUser | db_user_email | ",
+    "links" : [ {
+      "type" : "CAN_ADMIN",
+      "to" : "MariaDBDatabase | db_database_email | "
+    }, {
+      "type" : "CAN_READ",
+      "to" : "MariaDBDatabase | db_database_email | "
+    }, {
+      "type" : "CAN_WRITE",
+      "to" : "MariaDBDatabase | db_database_email | "
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "description" : "",
+      "name" : "db_user_email",
+      "password" : "the_password",
+      "resourceCategory" : "DATABASE",
+      "resourceDescription" : "",
+      "resourceEditorName" : "MariaDB User",
+      "resourceName" : "db_user_email"
+    }
+  }, {
+    "resource" : "UnixUser | james | /home/james",
+    "links" : [ ],
+    "tags" : [ ],
+    "content" : {
+      "homeFolder" : "/home/james",
+      "id" : 2001,
+      "name" : "james",
+      "resourceCategory" : "INFRASTRUCTURE",
+      "resourceDescription" : "/home/james",
+      "resourceEditorName" : "Unix User",
+      "resourceName" : "james",
+      "shell" : "/bin/bash"
+    }
+  }, {
+    "resource" : "UnixUser | mariadb | /home/mariadb",
+    "links" : [ ],
+    "tags" : [ ],
+    "content" : {
+      "homeFolder" : "/home/mariadb",
+      "id" : 2002,
+      "name" : "mariadb",
+      "resourceCategory" : "INFRASTRUCTURE",
+      "resourceDescription" : "/home/mariadb",
+      "resourceEditorName" : "Unix User",
+      "resourceName" : "mariadb",
+      "shell" : "/bin/bash"
+    }
+  }, {
+    "resource" : "WebsiteCertificate | example.com | 28247946f93580251ab809d91797275c54851d05, 2018-05-04, 2018-06-04",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "Domain | example.com | Domain for example.com"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "certificate" : "-----BEGIN CERTIFICATE-----
+MIIEwTCCAqmgAwIBAgIBATANBgkqhkiG9w0BAQsFADAWMRQwEgYDVQQDDAtleGFt
+cGxlLmNvbTAeFw0xODA1MDUwMTIwNDlaFw0xODA2MDUwMTIwNDlaMBYxFDASBgNV
+BAMMC2V4YW1wbGUuY29tMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA
+vBO21qHVMLtA7NGwnzWbTS/ToLeriG4aTYTwbYGSZ7DGWBwQCU5l7cMheqnxN0xR
+4f6c+OFFPMK7X0xpRxsP8MBhJtpWdhpc8L1C4FAWaJhQzqY3Xz/7iBJDUbASRQOH
+kbecUraKaheRKHkrCbyH37JvYdn5e0hnIWPcKropJylvsVZ175GHF4gwv7t5/hS1
+HPqNCSE6blPZn5ZwP5Fxla19KXZlsGEK3t6lxRggIQwzeXDgngoS3MEw3a8WRJyu
++hSsbbeMkfatadRT/5ynQuxFCBItbedJOiUGMKfsMuROM7i0sDfoORPZMiqHMXg8
+8/cxXcIJaptqttDow8VLHtDr9E6l87deUMD4zh+RisfISFoiF/sgRxxff1n+1nur
+zBHntvcrx3qIhWrLcMHZasisL3FZQPUTR10R2cFMGTvOmU7UloGSmNCKZBUkNJjN
+NNMoevdkIeQNHCHDJW73J5L/CFvgnLwf/Fpy7iDYpEwMrL1YRsa4azJDPifTgNQX
+ZR0FMKM8GfqW+kkJLlbpSnpn6yFZDS4KDx0k9MjNLfCZSz/wTXuXXdhYmYnzvr+F
+3k1GzHpbqO2b6SedemAM75qxRiSeAqjM/v0JVwrRjwrmgme3RSzjjPE757aXfVX0
+tZ0eFwY8xAoK99Eru7YKnAzZ77SwvIuhk5hgWeRwqx8CAwEAAaMaMBgwFgYDVR0R
+BA8wDYILZXhhbXBsZS5jb20wDQYJKoZIhvcNAQELBQADggIBAF3CsjAbo4WWHxTf
+ZhwRW5HPIbi8nqOMfuywKe+QsTupZC9ZI32zrtxKYgCgMYGyZ6ikHYnOQzpqpVlE
+abnhGBSt2ITy0FypW1GSN1ZcZSEs5z2RSwFpPeUrKNIx6zsrhPb9w13aJKsPEBj/
+0ZE9lNxs65I2Yz5jqVU87eTM4BxkUF7sPADSGzbq2vre5FsGQnD+CPY20sPhL5ls
+ht6DlySLKjbRBcyYHwXWgeEch95uz2gkLL4amkRimojWTclAEKKtZ7nrcyhhcWp+
+Li4CsI76krQoE3TqYUsyu2QzMXN+3dfivCdZe1gInpNhnkLChm25JUrQuN1KkZzp
+OkZnH7vRgOmFzRjXFMAf+FEStw5s5YPaIvY5YoJbN6+Olo0OxX9E0Lw6kc+GMJiZ
+5LEASGef4fpqzlZ61jde43IsydO5AXqBTh+ECqER8hGVfbnm1oN7FAYXmHVmDqL0
+IqqVKWvguu9//AV40a1w46SNbPsUa1L1E5v8Prr9Xt0YViYpclgI/GwP0dlDXiQz
+BvVI9v7djMnZ9pKxYKJcLQGPC/r5fxvu47Qg1A3zOAZVCdKt8bYaR9rkeAIwEYFs
+mxBXFQwL1gzMUWIamzmDZgmsbkLZN9m3QxLhgw3b3ttJQS/XZ/XbjRjZTNVzokup
+v5MQDKlsOT0PmcTDruexCrQVWicJ
+-----END CERTIFICATE-----
+",
+      "domainNames" : [ "example.com" ],
+      "end" : 1528161649000,
+      "privateKey" : "-----BEGIN RSA PRIVATE KEY-----
+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
+-----END RSA PRIVATE KEY-----
+",
+      "publicKey" : "-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAvBO21qHVMLtA7NGwnzWb
+TS/ToLeriG4aTYTwbYGSZ7DGWBwQCU5l7cMheqnxN0xR4f6c+OFFPMK7X0xpRxsP
+8MBhJtpWdhpc8L1C4FAWaJhQzqY3Xz/7iBJDUbASRQOHkbecUraKaheRKHkrCbyH
+37JvYdn5e0hnIWPcKropJylvsVZ175GHF4gwv7t5/hS1HPqNCSE6blPZn5ZwP5Fx
+la19KXZlsGEK3t6lxRggIQwzeXDgngoS3MEw3a8WRJyu+hSsbbeMkfatadRT/5yn
+QuxFCBItbedJOiUGMKfsMuROM7i0sDfoORPZMiqHMXg88/cxXcIJaptqttDow8VL
+HtDr9E6l87deUMD4zh+RisfISFoiF/sgRxxff1n+1nurzBHntvcrx3qIhWrLcMHZ
+asisL3FZQPUTR10R2cFMGTvOmU7UloGSmNCKZBUkNJjNNNMoevdkIeQNHCHDJW73
+J5L/CFvgnLwf/Fpy7iDYpEwMrL1YRsa4azJDPifTgNQXZR0FMKM8GfqW+kkJLlbp
+Snpn6yFZDS4KDx0k9MjNLfCZSz/wTXuXXdhYmYnzvr+F3k1GzHpbqO2b6SedemAM
+75qxRiSeAqjM/v0JVwrRjwrmgme3RSzjjPE757aXfVX0tZ0eFwY8xAoK99Eru7YK
+nAzZ77SwvIuhk5hgWeRwqx8CAwEAAQ==
+-----END PUBLIC KEY-----
+",
+      "resourceCategory" : "NET",
+      "resourceEditorName" : "Self-signed WebsiteCertificate",
+      "start" : 1525483249000,
+      "thumbprint" : "28247946f93580251ab809d91797275c54851d05"
+    }
+  }, {
+    "resource" : "WebsiteCertificate | mail.example.com | f890dc9be9a6b5116de69f1ed649b5524b92a4ef, 2018-05-04, 2018-06-04",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "Domain | mail.example.com | Domain for mail.example.com"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "certificate" : "-----BEGIN CERTIFICATE-----
+MIIE0DCCArigAwIBAgIBATANBgkqhkiG9w0BAQsFADAbMRkwFwYDVQQDDBBtYWls
+LmV4YW1wbGUuY29tMB4XDTE4MDUwNTAxMjEwM1oXDTE4MDYwNTAxMjEwM1owGzEZ
+MBcGA1UEAwwQbWFpbC5leGFtcGxlLmNvbTCCAiIwDQYJKoZIhvcNAQEBBQADggIP
+ADCCAgoCggIBALgnxKw5XN3xJyJE4RDezwLPwDwUTpbWnRvhVb0VxW1qj20LPH3P
+vx5OErLrEKCYlV+ULx8oUKbDh8XG/C1aRhhKvVR5VLVUNUIXdFBql6YA7aurLgDt
+Jg+XiKH2uN6JzgKbQl0i+nMcKlaNccPbE9VzlurMFRlHLvLXFHNdQFMC6JGHgjZ6
+WSjcsAOFFwBPf+JYZTzycPnYqZgwp36OrPZNcPQK446AbPF1FAxPd4pqsCeO9Gt8
+QkKJZj3pQ6YvGBx+2/FJGLqgKj3+uySQ0hUJeOJENtWLjWmafHlIOuQqFeOOLgos
+9igCiYucDSe3LDWOAQzOa0kwtvYR32osGqtuy+nEPozBdg08ydxlRroIfO5TOliM
+WtlhJJhl/03ivSZFFB6kk/Lw15ILCgJbVzvdEaV0Dh8BKzYB5ykvniZHnToeaKDb
+tZ/yX4XWpjKkB4ECdscVp5qAwDVJX18OqWvXBfsryL76FB3Y5M0QcL+k/DEG8Xw1
+wXEFOFuItf3JKKnjQExeLhGoa6ucMaUgR2oTwsm2LV8McNnSwCW7yfmBhuNgnsbE
+yirypV7NFfwfruMC8/flIfn+93LjDd/0lVvHFcEEZVKetY7zX9Y5yHwWepu/pXRc
+N3+GZdXT6Zzt5kDsA4u6QJOzSKB76xsAbnB3D2aFxFLsRzAopq9u7i0jAgMBAAGj
+HzAdMBsGA1UdEQQUMBKCEG1haWwuZXhhbXBsZS5jb20wDQYJKoZIhvcNAQELBQAD
+ggIBAJvPVXUQPGe+J8TtfsCJwsBi4d6kN2AhMXZgEBLSV4jhf7/PcBit3hISIfrM
+xtnIXrSqLpjO7kVbNKGXYmWu/DMEeL5nnvSxC27uM703gtKBeY5lpv722T+QcrrE
+73dQpvQaoWKaU/aLRA0zSeUcyRBG5FK2N+oW/JPT20VtJR8WxYiWh7Jf3zP9h0uV
+qia5yJiXy+xC6vO6e0DkaAhOXyZBSgRlHJywqLAo0eJFKKDIZuBep5Qwb+0lP5qh
+Tmam+ToDSFDih8oncMVFirnuE599C/HXZGWVVjqoVlUOOLDkCKg27e9BjRsVPO3U
+yFdaW221q26FF9dXW35ls7+wJV+rZR5TKili60hAfwXjTrSPxqchG1EIq2i47Nh7
+dVh89Q3QBMKqbg9C74Tb2IzfeR+HFfNNu9LA1NjYUGblsn1JuTe0uZFi/v9386tS
+w9MHygBxxkcOyOeRXPDk6yxEOM3C1mxqkRjQWmcbG1ZbiG7Nh7Nz2tRbpKC/NV6c
+itVv2MZwP4Dz6MKfSRY5n+AWylG8d6pOCEJnSYrMMs0+SGGbsNlBiX9r9rf9Ek8M
+6kk79RA1tNRN5/Q/pCI7cKHcI9ELaW0nUArWgN4kolvtAq3coIR2ULCbcbjYW6eA
+OOvnCa5T6BOV7uQBCy5WkkQcRid8it7sDMYE5JWmfFaNDvDW
+-----END CERTIFICATE-----
+",
+      "domainNames" : [ "mail.example.com" ],
+      "end" : 1528161663000,
+      "privateKey" : "-----BEGIN RSA PRIVATE KEY-----
+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
+-----END RSA PRIVATE KEY-----
+",
+      "publicKey" : "-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAuCfErDlc3fEnIkThEN7P
+As/APBROltadG+FVvRXFbWqPbQs8fc+/Hk4SsusQoJiVX5QvHyhQpsOHxcb8LVpG
+GEq9VHlUtVQ1Qhd0UGqXpgDtq6suAO0mD5eIofa43onOAptCXSL6cxwqVo1xw9sT
+1XOW6swVGUcu8tcUc11AUwLokYeCNnpZKNywA4UXAE9/4lhlPPJw+dipmDCnfo6s
+9k1w9ArjjoBs8XUUDE93imqwJ470a3xCQolmPelDpi8YHH7b8UkYuqAqPf67JJDS
+FQl44kQ21YuNaZp8eUg65CoV444uCiz2KAKJi5wNJ7csNY4BDM5rSTC29hHfaiwa
+q27L6cQ+jMF2DTzJ3GVGugh87lM6WIxa2WEkmGX/TeK9JkUUHqST8vDXkgsKAltX
+O90RpXQOHwErNgHnKS+eJkedOh5ooNu1n/JfhdamMqQHgQJ2xxWnmoDANUlfXw6p
+a9cF+yvIvvoUHdjkzRBwv6T8MQbxfDXBcQU4W4i1/ckoqeNATF4uEahrq5wxpSBH
+ahPCybYtXwxw2dLAJbvJ+YGG42CexsTKKvKlXs0V/B+u4wLz9+Uh+f73cuMN3/SV
+W8cVwQRlUp61jvNf1jnIfBZ6m7+ldFw3f4Zl1dPpnO3mQOwDi7pAk7NIoHvrGwBu
+cHcPZoXEUuxHMCimr27uLSMCAwEAAQ==
+-----END PUBLIC KEY-----
+",
+      "resourceCategory" : "NET",
+      "resourceEditorName" : "Self-signed WebsiteCertificate",
+      "start" : 1525483263000,
+      "thumbprint" : "f890dc9be9a6b5116de69f1ed649b5524b92a4ef"
+    }
+  } ]
+}

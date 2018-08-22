@@ -3,7 +3,7 @@
     "resource" : "Application | db_server_email | ",
     "links" : [ {
       "type" : "INSTALLED_ON",
-      "to" : "Machine | localhost | localhost"
+      "to" : "Machine | localhost | localhost (127.0.0.1)"
     }, {
       "type" : "RUN_AS",
       "to" : "UnixUser | mariadb | /home/mariadb"
@@ -58,7 +58,7 @@ password=ABC"
         } ],
         "environments" : { },
         "executeWhenStartedCommands" : [ "/mariadb-update-manager.sh" ],
-        "from" : "foilen/fcloud-docker-mariadb:10.3.5-1.1.0-001",
+        "from" : "foilen/fcloud-docker-mariadb:10.3.5-1.1.1-001",
         "hostToIpMapping" : [ ],
         "portsEndpoint" : {
           "3306" : "MYSQL_TCP"
@@ -103,7 +103,7 @@ password=ABC"
     "resource" : "Application | james_server | Apache James email server",
     "links" : [ {
       "type" : "INSTALLED_ON",
-      "to" : "Machine | localhost | localhost"
+      "to" : "Machine | localhost | localhost (127.0.0.1)"
     }, {
       "type" : "RUN_AS",
       "to" : "UnixUser | james | /home/james"
@@ -1281,10 +1281,43 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
       "type" : "MX"
     }
   }, {
+    "resource" : "DnsEntry | localhost / A | 127.0.0.1",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "Domain | localhost | Domain for localhost"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "details" : "127.0.0.1",
+      "name" : "localhost",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "127.0.0.1",
+      "resourceName" : "localhost / A",
+      "type" : "A"
+    }
+  }, {
+    "resource" : "DnsEntry | mail.example.com / A | 127.0.0.1",
+    "links" : [ {
+      "type" : "MANAGES",
+      "to" : "Domain | mail.example.com | Domain for mail.example.com"
+    } ],
+    "tags" : [ ],
+    "content" : {
+      "details" : "127.0.0.1",
+      "name" : "mail.example.com",
+      "resourceCategory" : "NET",
+      "resourceDescription" : "127.0.0.1",
+      "resourceName" : "mail.example.com / A",
+      "type" : "A"
+    }
+  }, {
     "resource" : "DnsPointer | mail.example.com | mail.example.com",
     "links" : [ {
-      "type" : "INSTALLED_ON",
-      "to" : "Machine | localhost | localhost"
+      "type" : "MANAGES",
+      "to" : "DnsEntry | mail.example.com / A | 127.0.0.1"
+    }, {
+      "type" : "POINTS_TO",
+      "to" : "Machine | localhost | localhost (127.0.0.1)"
     } ],
     "tags" : [ ],
     "content" : {
@@ -1495,7 +1528,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
       "to" : "AttachableMariaDB | db_database_email | Local infra to a MariaDB Database"
     }, {
       "type" : "INSTALLED_ON",
-      "to" : "Machine | localhost | localhost"
+      "to" : "Machine | localhost | localhost (127.0.0.1)"
     }, {
       "type" : "MANAGES",
       "to" : "Application | james_server | Apache James email server"
@@ -1528,16 +1561,17 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
       "resourceName" : "james_server"
     }
   }, {
-    "resource" : "Machine | localhost | localhost",
+    "resource" : "Machine | localhost | localhost (127.0.0.1)",
     "links" : [ {
       "type" : "MANAGES",
-      "to" : "Domain | localhost | Domain for localhost"
+      "to" : "DnsEntry | localhost / A | 127.0.0.1"
     } ],
     "tags" : [ ],
     "content" : {
       "name" : "localhost",
+      "publicIp" : "127.0.0.1",
       "resourceCategory" : "INFRASTRUCTURE",
-      "resourceDescription" : "localhost",
+      "resourceDescription" : "localhost (127.0.0.1)",
       "resourceEditorName" : "Machine",
       "resourceName" : "localhost"
     }
@@ -1560,7 +1594,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "resource" : "MariaDBServer | db_server_email | ",
     "links" : [ {
       "type" : "INSTALLED_ON",
-      "to" : "Machine | localhost | localhost"
+      "to" : "Machine | localhost | localhost (127.0.0.1)"
     }, {
       "type" : "MANAGES",
       "to" : "Application | db_server_email | "
