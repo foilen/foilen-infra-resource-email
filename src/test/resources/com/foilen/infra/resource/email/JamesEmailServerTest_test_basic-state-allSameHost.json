@@ -94,6 +94,7 @@ password=ABC"
       "description" : "",
       "domainNames" : [ ],
       "executionPolicy" : "ALWAYS_ON",
+      "meta" : { },
       "name" : "db_server_email",
       "resourceCategory" : "INFRASTRUCTURE",
       "resourceDescription" : "",
@@ -1019,6 +1020,11 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
         <processor>local-address-error</processor>
         <notice>550 - Requested action not taken: no such user here</notice>
       </mailet>
+      
+      <!-- Remote delivery when destination was changed by ExactAndCatchAllRedirections -->
+      <mailet match=\"HasMailAttribute=isRedirection\" class=\"ToProcessor\">
+        <processor>auth-user-relay</processor>
+      </mailet>
 
       <!-- Is a user and needs to relay his emails -->
       <mailet match=\"SentByMailet\" class=\"ToProcessor\">
@@ -1212,7 +1218,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
         } ],
         "environments" : { },
         "executeWhenStartedCommands" : [ ],
-        "from" : "foilen/fcloud-docker-email:3.1.0-871d10-1",
+        "from" : "foilen/fcloud-docker-email:3.1.0-1",
         "hostToIpMapping" : [ ],
         "portsEndpoint" : {
           "10025" : "SMTP_TCP"
@@ -1245,6 +1251,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
       "description" : "Apache James email server",
       "domainNames" : [ ],
       "executionPolicy" : "ALWAYS_ON",
+      "meta" : { },
       "name" : "james_server",
       "resourceCategory" : "INFRASTRUCTURE",
       "resourceDescription" : "Apache James email server",
@@ -1259,6 +1266,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "localPort" : 3306,
+      "meta" : { },
       "name" : "db_database_email",
       "resourceCategory" : "DATABASE",
       "resourceDescription" : "Local infra to a MariaDB Database",
@@ -1274,6 +1282,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "details" : "mail.example.com",
+      "meta" : { },
       "name" : "example.com",
       "resourceCategory" : "NET",
       "resourceDescription" : "mail.example.com",
@@ -1289,6 +1298,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "details" : "127.0.0.1",
+      "meta" : { },
       "name" : "localhost",
       "resourceCategory" : "NET",
       "resourceDescription" : "127.0.0.1",
@@ -1304,6 +1314,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "details" : "127.0.0.1",
+      "meta" : { },
       "name" : "mail.example.com",
       "resourceCategory" : "NET",
       "resourceDescription" : "127.0.0.1",
@@ -1321,6 +1332,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     } ],
     "tags" : [ ],
     "content" : {
+      "meta" : { },
       "name" : "mail.example.com",
       "resourceCategory" : "NET",
       "resourceDescription" : "mail.example.com",
@@ -1331,6 +1343,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "links" : [ ],
     "tags" : [ ],
     "content" : {
+      "meta" : { },
       "name" : "example.com",
       "resourceCategory" : "NET",
       "resourceDescription" : "Domain for example.com",
@@ -1342,6 +1355,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "links" : [ ],
     "tags" : [ ],
     "content" : {
+      "meta" : { },
       "name" : "localhost",
       "resourceCategory" : "NET",
       "resourceDescription" : "Domain for localhost",
@@ -1356,6 +1370,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     } ],
     "tags" : [ ],
     "content" : {
+      "meta" : { },
       "name" : "mail.example.com",
       "resourceCategory" : "NET",
       "resourceDescription" : "Domain for mail.example.com",
@@ -1371,6 +1386,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "accountName" : "a1",
+      "meta" : { },
       "resourceCategory" : "EMAIL",
       "resourceDescription" : "Email Domain",
       "resourceEditorName" : "Email Account",
@@ -1387,6 +1403,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "accountName" : "a2",
+      "meta" : { },
       "resourceCategory" : "EMAIL",
       "resourceDescription" : "Email Domain",
       "resourceEditorName" : "Email Account",
@@ -1403,6 +1420,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "accountName" : "a3",
+      "meta" : { },
       "resourceCategory" : "EMAIL",
       "resourceDescription" : "Email Domain",
       "resourceEditorName" : "Email Account",
@@ -1419,6 +1437,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "accountName" : "a4",
+      "meta" : { },
       "resourceCategory" : "EMAIL",
       "resourceDescription" : "Email Domain",
       "resourceEditorName" : "Email Account",
@@ -1435,6 +1454,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "accountName" : "any",
+      "meta" : { },
       "resourceCategory" : "EMAIL",
       "resourceDescription" : "Email Domain",
       "resourceEditorName" : "Email Account",
@@ -1467,6 +1487,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "content" : {
       "domainName" : "example.com",
       "imapDomainName" : "mail.example.com",
+      "meta" : { },
       "mxDomainName" : "mail.example.com",
       "pop3DomainName" : "mail.example.com",
       "resourceCategory" : "EMAIL",
@@ -1483,6 +1504,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "accountName" : "",
+      "meta" : { },
       "redirectTos" : [ "any@example.com" ],
       "resourceCategory" : "EMAIL",
       "resourceDescription" : "Email Domain",
@@ -1499,6 +1521,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "accountName" : "r1",
+      "meta" : { },
       "redirectTos" : [ "a2@example.com", "a1@example.com" ],
       "resourceCategory" : "EMAIL",
       "resourceDescription" : "Email Domain",
@@ -1512,6 +1535,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "hostname" : "relay.example.com",
+      "meta" : { },
       "name" : "example-relay",
       "password" : "BBB",
       "port" : 587,
@@ -1553,6 +1577,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     } ],
     "tags" : [ ],
     "content" : {
+      "meta" : { },
       "name" : "james_server",
       "postmasterEmail" : "a1@example.com",
       "resourceCategory" : "EMAIL",
@@ -1568,6 +1593,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     } ],
     "tags" : [ ],
     "content" : {
+      "meta" : { },
       "name" : "localhost",
       "publicIp" : "127.0.0.1",
       "resourceCategory" : "INFRASTRUCTURE",
@@ -1584,6 +1610,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "description" : "",
+      "meta" : { },
       "name" : "db_database_email",
       "resourceCategory" : "DATABASE",
       "resourceDescription" : "",
@@ -1605,6 +1632,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "description" : "",
+      "meta" : { },
       "name" : "db_server_email",
       "resourceCategory" : "DATABASE",
       "resourceDescription" : "",
@@ -1627,6 +1655,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "description" : "",
+      "meta" : { },
       "name" : "db_user_email",
       "password" : "the_password",
       "resourceCategory" : "DATABASE",
@@ -1641,6 +1670,8 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "content" : {
       "homeFolder" : "/home/james",
       "id" : 2001,
+      "keepClearPassword" : false,
+      "meta" : { },
       "name" : "james",
       "resourceCategory" : "INFRASTRUCTURE",
       "resourceDescription" : "/home/james",
@@ -1655,6 +1686,8 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "content" : {
       "homeFolder" : "/home/mariadb",
       "id" : 2002,
+      "keepClearPassword" : false,
+      "meta" : { },
       "name" : "mariadb",
       "resourceCategory" : "INFRASTRUCTURE",
       "resourceDescription" : "/home/mariadb",
@@ -1701,6 +1734,7 @@ v5MQDKlsOT0PmcTDruexCrQVWicJ
 ",
       "domainNames" : [ "example.com" ],
       "end" : 1528161649000,
+      "meta" : { },
       "privateKey" : "-----BEGIN RSA PRIVATE KEY-----
 MIIJJwIBAAKCAgEAvBO21qHVMLtA7NGwnzWbTS/ToLeriG4aTYTwbYGSZ7DGWBwQ
 CU5l7cMheqnxN0xR4f6c+OFFPMK7X0xpRxsP8MBhJtpWdhpc8L1C4FAWaJhQzqY3
@@ -1812,6 +1846,7 @@ OOvnCa5T6BOV7uQBCy5WkkQcRid8it7sDMYE5JWmfFaNDvDW
 ",
       "domainNames" : [ "mail.example.com" ],
       "end" : 1528161663000,
+      "meta" : { },
       "privateKey" : "-----BEGIN RSA PRIVATE KEY-----
 MIIJKAIBAAKCAgEAuCfErDlc3fEnIkThEN7PAs/APBROltadG+FVvRXFbWqPbQs8
 fc+/Hk4SsusQoJiVX5QvHyhQpsOHxcb8LVpGGEq9VHlUtVQ1Qhd0UGqXpgDtq6su

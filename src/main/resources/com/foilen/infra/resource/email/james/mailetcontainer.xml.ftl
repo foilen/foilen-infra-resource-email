@@ -77,6 +77,11 @@
         <processor>local-address-error</processor>
         <notice>550 - Requested action not taken: no such user here</notice>
       </mailet>
+      
+      <!-- Remote delivery when destination was changed by ExactAndCatchAllRedirections -->
+      <mailet match="HasMailAttribute=isRedirection" class="ToProcessor">
+        <processor>auth-user-relay</processor>
+      </mailet>
 
       <!-- Is a user and needs to relay his emails -->
       <mailet match="SentByMailet" class="ToProcessor">
