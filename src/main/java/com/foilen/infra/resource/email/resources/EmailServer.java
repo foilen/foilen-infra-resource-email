@@ -30,6 +30,8 @@ import com.foilen.infra.resource.unixuser.UnixUser;
  */
 public abstract class EmailServer extends AbstractIPResource {
 
+    public static final String RESOURCE_TYPE = "Email Server";
+
     public static final String PROPERTY_NAME = "name";
     public static final String PROPERTY_POSTMASTER_EMAIL = "postmasterEmail";
 

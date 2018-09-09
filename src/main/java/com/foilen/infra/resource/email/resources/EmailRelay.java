@@ -14,6 +14,8 @@ import com.foilen.infra.plugin.v1.model.resource.InfraPluginResourceCategory;
 
 public class EmailRelay extends AbstractIPResource {
 
+    public static final String RESOURCE_TYPE = "Email Relay";
+
     public static final String PROPERTY_NAME = "name";
     public static final String PROPERTY_HOSTNAME = "hostname";
     public static final String PROPERTY_PORT = "port";

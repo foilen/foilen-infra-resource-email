@@ -39,6 +39,8 @@ import com.foilen.infra.resource.webcertificate.WebsiteCertificate;
  */
 public class JamesEmailServer extends EmailServer {
 
+    public static final String RESOURCE_TYPE = "Apache James Email Server";
+
     @Override
     public String getResourceDescription() {
         return "Apache James email server";

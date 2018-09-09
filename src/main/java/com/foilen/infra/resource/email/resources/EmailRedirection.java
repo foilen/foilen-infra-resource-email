@@ -24,6 +24,8 @@ import com.foilen.smalltools.tools.SecureRandomTools;
  */
 public class EmailRedirection extends AbstractIPResource {
 
+    public static final String RESOURCE_TYPE = "Email Redirection";
+
     public static final String PROPERTY_UID = "uid";
     public static final String PROPERTY_ACCOUNT_NAME = "accountName";
     public static final String PROPERTY_REDIRECT_TOS = "redirectTos";

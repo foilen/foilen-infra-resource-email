@@ -30,6 +30,8 @@ import com.foilen.infra.resource.composableapplication.ComposableApplication;
  */
 public class AttachableEmailRelayToMsmtpConfigFile extends AttachablePart {
 
+    public static final String RESOURCE_TYPE = "Attachable Email Relay Msmtp Config File";
+
     public static final String PROPERTY_NAME = "name";
     public static final String PROPERTY_CONFIG_PATH = "configPath";
     public static final String PROPERTY_USE_TLS = "useTls";

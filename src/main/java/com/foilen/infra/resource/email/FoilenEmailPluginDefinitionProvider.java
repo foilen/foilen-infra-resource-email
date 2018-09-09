@@ -38,39 +38,39 @@ public class FoilenEmailPluginDefinitionProvider implements IPPluginDefinitionPr
     public IPPluginDefinitionV1 getIPPluginDefinition() {
         IPPluginDefinitionV1 pluginDefinition = new IPPluginDefinitionV1("Foilen", "Email", "To manage emails", "1.0.0");
 
-        pluginDefinition.addCustomResource(EmailServer.class, "Email Server", //
+        pluginDefinition.addCustomResource(EmailServer.class, EmailServer.RESOURCE_TYPE, //
                 Arrays.asList(EmailServer.PROPERTY_NAME), //
                 Collections.emptyList());
-        pluginDefinition.addCustomResource(JamesEmailServer.class, "Apache James Email Server", //
+        pluginDefinition.addCustomResource(JamesEmailServer.class, JamesEmailServer.RESOURCE_TYPE, //
                 Arrays.asList(EmailServer.PROPERTY_NAME), //
                 Collections.emptyList());
-        pluginDefinition.addCustomResource(EmailRelay.class, "Email Relay", //
+        pluginDefinition.addCustomResource(EmailRelay.class, EmailRelay.RESOURCE_TYPE, //
                 Arrays.asList(EmailRelay.PROPERTY_NAME), //
                 Arrays.asList( //
                         EmailRelay.PROPERTY_NAME, //
                         EmailRelay.PROPERTY_HOSTNAME //
                 ));
-        pluginDefinition.addCustomResource(EmailDomain.class, "Email Domain", //
+        pluginDefinition.addCustomResource(EmailDomain.class, EmailDomain.RESOURCE_TYPE, //
                 Arrays.asList(EmailDomain.PROPERTY_DOMAIN_NAME), //
                 Arrays.asList( //
                         EmailDomain.PROPERTY_DOMAIN_NAME, //
                         EmailDomain.PROPERTY_IMAP_DOMAIN_NAME, //
                         EmailDomain.PROPERTY_POP3_DOMAIN_NAME //
                 ));
-        pluginDefinition.addCustomResource(EmailRedirection.class, "Email Redirection", //
+        pluginDefinition.addCustomResource(EmailRedirection.class, EmailRedirection.RESOURCE_TYPE, //
                 Arrays.asList(EmailRedirection.PROPERTY_UID), //
                 Arrays.asList( //
                         EmailRedirection.PROPERTY_UID, //
                         EmailRedirection.PROPERTY_ACCOUNT_NAME, //
                         EmailRedirection.PROPERTY_REDIRECT_TOS //
                 ));
-        pluginDefinition.addCustomResource(EmailAccount.class, "Email Account", //
+        pluginDefinition.addCustomResource(EmailAccount.class, EmailAccount.RESOURCE_TYPE, //
                 Arrays.asList(EmailAccount.PROPERTY_UID), //
                 Arrays.asList( //
                         EmailAccount.PROPERTY_UID, //
                         EmailAccount.PROPERTY_ACCOUNT_NAME //
                 ));
-        pluginDefinition.addCustomResource(AttachableEmailRelayToMsmtpConfigFile.class, "Attachable Email Relay Msmtp Config File", //
+        pluginDefinition.addCustomResource(AttachableEmailRelayToMsmtpConfigFile.class, AttachableEmailRelayToMsmtpConfigFile.RESOURCE_TYPE, //
                 Arrays.asList(AttachableEmailRelayToMsmtpConfigFile.PROPERTY_NAME), //
                 Collections.emptyList());
 

@@ -22,6 +22,8 @@ import com.foilen.smalltools.tools.SecureRandomTools;
  */
 public class EmailAccount extends AbstractIPResource {
 
+    public static final String RESOURCE_TYPE = "Email Account";
+
     public static final String PROPERTY_UID = "uid";
     public static final String PROPERTY_ACCOUNT_NAME = "accountName";
     public static final String PROPERTY_SHA_512_PASSWORD = "sha512Password";

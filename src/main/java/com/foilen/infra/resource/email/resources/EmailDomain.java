@@ -36,6 +36,8 @@ import com.foilen.infra.resource.webcertificate.WebsiteCertificate;
  */
 public class EmailDomain extends AbstractIPResource {
 
+    public static final String RESOURCE_TYPE = "Email Domain";
+
     public static final String PROPERTY_DOMAIN_NAME = "domainName";
     public static final String PROPERTY_MX_DOMAIN_NAME = "mxDomainName";
     public static final String PROPERTY_IMAP_DOMAIN_NAME = "imapDomainName";
