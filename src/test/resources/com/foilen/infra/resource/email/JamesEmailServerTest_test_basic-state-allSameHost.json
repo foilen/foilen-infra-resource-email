@@ -31,7 +31,7 @@ password=ABC"
         } ],
         "containerUsersToChangeId" : [ {
           "a" : "mysql",
-          "b" : 2002
+          "b" : 72002
         } ],
         "copyWhenStartedPathAndContentFiles" : [ {
           "a" : "/manager-config.json",
@@ -65,7 +65,7 @@ password=ABC"
         },
         "portsExposed" : { },
         "portsRedirect" : [ ],
-        "runAs" : 2002,
+        "runAs" : 72002,
         "services" : [ {
           "command" : "/mariadb-start.sh",
           "name" : "app"
@@ -73,21 +73,21 @@ password=ABC"
         "udpPortsExposed" : { },
         "volumes" : [ {
           "containerFsFolder" : "/var/lib/mysql",
-          "groupId" : 2002,
+          "groupId" : 72002,
           "hostFolder" : "/home/mariadb/mysql/db_server_email/data",
-          "ownerId" : 2002,
+          "ownerId" : 72002,
           "permissions" : "770"
         }, {
           "containerFsFolder" : "/var/run/mysqld/",
-          "groupId" : 2002,
+          "groupId" : 72002,
           "hostFolder" : "/home/mariadb/mysql/db_server_email/run",
-          "ownerId" : 2002,
+          "ownerId" : 72002,
           "permissions" : "770"
         }, {
           "containerFsFolder" : "/volumes/config/",
-          "groupId" : 2002,
+          "groupId" : 72002,
           "hostFolder" : "/home/mariadb/mysql/db_server_email/config",
-          "ownerId" : 2002,
+          "ownerId" : 72002,
           "permissions" : "770"
         } ]
       },
@@ -1178,7 +1178,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
         } ],
         "containerUsersToChangeId" : [ {
           "a" : "james",
-          "b" : 2001
+          "b" : 72001
         } ],
         "copyWhenStartedPathAndContentFiles" : [ {
           "a" : "/emailManagerConfig.json",
@@ -1237,7 +1237,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
           "toLocalMachine" : true,
           "toMachine" : "localhost"
         } ],
-        "runAs" : 2001,
+        "runAs" : 72001,
         "services" : [ {
           "command" : "/james-start.sh",
           "name" : "james"
@@ -1669,7 +1669,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "homeFolder" : "/home/james",
-      "id" : 2001,
+      "id" : 72001,
       "keepClearPassword" : false,
       "meta" : { },
       "name" : "james",
@@ -1685,7 +1685,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     "tags" : [ ],
     "content" : {
       "homeFolder" : "/home/mariadb",
-      "id" : 2002,
+      "id" : 72002,
       "keepClearPassword" : false,
       "meta" : { },
       "name" : "mariadb",
