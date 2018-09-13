@@ -14,14 +14,12 @@ import java.security.Key;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.foilen.infra.plugin.v1.core.context.CommonServicesContext;
@@ -54,50 +52,11 @@ import com.foilen.smalltools.crypt.spongycastle.cert.RSACertificate;
 import com.foilen.smalltools.crypt.spongycastle.cert.RSATools;
 import com.foilen.smalltools.tools.FreemarkerTools;
 import com.foilen.smalltools.tools.JsonTools;
+import com.foilen.smalltools.tools.StringTools;
 import com.foilen.smalltools.tuple.Tuple2;
 import com.google.common.base.Strings;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 
 public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResourcesEventHandler<JamesEmailServer> {
-
-    private static Cache<String, byte[]> keystorePerThumbprint = CacheBuilder.newBuilder() //
-            .maximumSize(1000).expireAfterWrite(10, TimeUnit.MINUTES) //
-            .build();
-
-    protected static byte[] createKeystore(List<WebsiteCertificate> certs) {
-        WebsiteCertificate cert = certs.get(0);
-
-        try {
-            return keystorePerThumbprint.get(cert.getThumbprint(), new Callable<byte[]>() {
-                @Override
-                public byte[] call() throws Exception {
-                    try {
-                        RSACertificate rsaCert = CertificateHelper.toRSACertificate(cert);
-
-                        char[] password = new char[] { 'j', 'a', 'm', 'e', 's' };
-                        KeyStore keyStore = KeyStore.getInstance("PKCS12");
-                        keyStore.load(null, password);
-
-                        String alias = "james";
-                        Certificate certificate = rsaCert.getCertificate();
-                        keyStore.setCertificateEntry(alias, certificate);
-                        Key key = RSATools.createPrivateKey(rsaCert.getKeysForSigning());
-                        keyStore.setKeyEntry(alias, key, password, new Certificate[] { certificate });
-
-                        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-                        keyStore.store(outStream, password);
-                        return outStream.toByteArray();
-                    } catch (Exception e) {
-                        throw new ProblemException("Could not create the keystore", e);
-                    }
-                }
-            });
-        } catch (ExecutionException e) {
-            throw new ProblemException("Could get the keystore", e);
-        }
-
-    }
 
     @Override
     protected void commonHandlerExecute(CommonServicesContext services, FinalStateManagedResourcesUpdateEventHandlerContext<JamesEmailServer> context) {
@@ -242,9 +201,9 @@ public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResou
             assetsBundle.addAssetResource("/james-server-app/conf/usersrepository.xml", "/com/foilen/infra/resource/email/james/usersrepository.xml");
 
             // Keystores
-            assetsBundle.addAssetContent("/james-server-app/conf/keystore-imaps", createKeystore(certsImap));
-            assetsBundle.addAssetContent("/james-server-app/conf/keystore-pop3s", createKeystore(certsPop3));
-            assetsBundle.addAssetContent("/james-server-app/conf/keystore-smtps", createKeystore(certsSmtp));
+            assetsBundle.addAssetContent("/james-server-app/conf/keystore-imaps", createKeystore(jamesEmailServer, "imaps", certsImap));
+            assetsBundle.addAssetContent("/james-server-app/conf/keystore-pop3s", createKeystore(jamesEmailServer, "pop3s", certsPop3));
+            assetsBundle.addAssetContent("/james-server-app/conf/keystore-smtps", createKeystore(jamesEmailServer, "smtp", certsSmtp));
 
             // Config for Manager Daemon Service
             EmailManagerConfig emailManagerConfig = new EmailManagerConfig();
@@ -330,6 +289,48 @@ public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResou
             applicationFinalStateManagedResource.addManagedLinksToType(LinkTypeConstants.RUN_AS);
             applicationFinalStateManagedResource.addLinkTo(LinkTypeConstants.RUN_AS, unixUser);
 
+        }
+
+    }
+
+    protected byte[] createKeystore(JamesEmailServer jamesEmailServer, String certType, List<WebsiteCertificate> certs) {
+
+        WebsiteCertificate cert = certs.get(0);
+
+        if (StringTools.safeEquals(jamesEmailServer.getMeta().get("certThumbprint-" + certType), cert.getThumbprint())) {
+            // Return same
+            logger.debug("Keystore for cert {} is already generated");
+            String certBase64 = jamesEmailServer.getMeta().get("certKeystore-" + certType);
+            if (Strings.isNullOrEmpty(certBase64)) {
+                logger.warn("Keystore for cert {} was already generated, but it is not present. Will regenerate");
+            } else {
+                return Base64.getDecoder().decode(certBase64);
+            }
+        }
+
+        logger.debug("Keystore for cert {} is not generated. Will generate");
+        jamesEmailServer.getMeta().put("certThumbprint-" + certType, cert.getThumbprint());
+
+        try {
+            RSACertificate rsaCert = CertificateHelper.toRSACertificate(cert);
+
+            char[] password = new char[] { 'j', 'a', 'm', 'e', 's' };
+            KeyStore keyStore = KeyStore.getInstance("PKCS12");
+            keyStore.load(null, password);
+
+            String alias = "james";
+            Certificate certificate = rsaCert.getCertificate();
+            keyStore.setCertificateEntry(alias, certificate);
+            Key key = RSATools.createPrivateKey(rsaCert.getKeysForSigning());
+            keyStore.setKeyEntry(alias, key, password, new Certificate[] { certificate });
+
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            keyStore.store(outStream, password);
+            byte[] byteArray = outStream.toByteArray();
+            jamesEmailServer.getMeta().put("certKeystore-" + certType, Base64.getEncoder().encodeToString(byteArray));
+            return byteArray;
+        } catch (Exception e) {
+            throw new ProblemException("Could not create the keystore", e);
         }
 
     }
