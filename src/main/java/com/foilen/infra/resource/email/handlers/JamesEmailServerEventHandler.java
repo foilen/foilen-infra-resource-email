@@ -203,9 +203,9 @@ public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResou
             assetsBundle.addAssetResource("/james-server-app/conf/usersrepository.xml", "/com/foilen/infra/resource/email/james/usersrepository.xml");
 
             // Keystores
-            assetsBundle.addAssetContent("/james-server-app/conf/keystore-imaps", createKeystore(jamesEmailServer, "imaps", certsImap));
-            assetsBundle.addAssetContent("/james-server-app/conf/keystore-pop3s", createKeystore(jamesEmailServer, "pop3s", certsPop3));
-            assetsBundle.addAssetContent("/james-server-app/conf/keystore-smtps", createKeystore(jamesEmailServer, "smtp", certsSmtp));
+            assetsBundle.addAssetContent("/james-server-app/conf/keystore-imaps", createKeystore(context, jamesEmailServer, "imaps", certsImap));
+            assetsBundle.addAssetContent("/james-server-app/conf/keystore-pop3s", createKeystore(context, jamesEmailServer, "pop3s", certsPop3));
+            assetsBundle.addAssetContent("/james-server-app/conf/keystore-smtps", createKeystore(context, jamesEmailServer, "smtp", certsSmtp));
 
             // Config for Manager Daemon Service
             EmailManagerConfig emailManagerConfig = new EmailManagerConfig();
@@ -295,22 +295,22 @@ public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResou
 
     }
 
-    protected byte[] createKeystore(JamesEmailServer jamesEmailServer, String certType, List<WebsiteCertificate> certs) {
+    protected byte[] createKeystore(FinalStateManagedResourcesUpdateEventHandlerContext<JamesEmailServer> context, JamesEmailServer jamesEmailServer, String certType, List<WebsiteCertificate> certs) {
 
         WebsiteCertificate cert = certs.get(0);
 
         if (StringTools.safeEquals(jamesEmailServer.getMeta().get("certThumbprint-" + certType), cert.getThumbprint())) {
             // Return same
-            logger.debug("Keystore for cert {} is already generated");
+            logger.debug("Keystore for cert {} is already generated", certType);
             String certBase64 = jamesEmailServer.getMeta().get("certKeystore-" + certType);
             if (Strings.isNullOrEmpty(certBase64)) {
-                logger.warn("Keystore for cert {} was already generated, but it is not present. Will regenerate");
+                logger.warn("Keystore for cert {} was already generated, but it is not present. Will regenerate", certType);
             } else {
                 return Base64.getDecoder().decode(certBase64);
             }
         }
 
-        logger.debug("Keystore for cert {} is not generated. Will generate");
+        logger.debug("Keystore for cert {} is not generated. Will generate", certType);
         jamesEmailServer.getMeta().put("certThumbprint-" + certType, cert.getThumbprint());
 
         try {
@@ -330,6 +330,7 @@ public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResou
             keyStore.store(outStream, password);
             byte[] byteArray = outStream.toByteArray();
             jamesEmailServer.getMeta().put("certKeystore-" + certType, Base64.getEncoder().encodeToString(byteArray));
+            context.setRequestUpdateResource(true);
             return byteArray;
         } catch (Exception e) {
             throw new ProblemException("Could not create the keystore", e);
