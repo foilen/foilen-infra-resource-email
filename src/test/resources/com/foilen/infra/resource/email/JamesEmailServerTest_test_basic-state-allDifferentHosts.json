@@ -374,6 +374,13 @@ log4j.appender.FILE.MaxBackupIndex=1
 log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
 log4j.appender.FILE.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
 
+log4j.appender.FOILEN=org.apache.log4j.RollingFileAppender
+log4j.appender.FOILEN.File=../log/foilen.log
+log4j.appender.FOILEN.MaxFileSize=100MB
+log4j.appender.FOILEN.MaxBackupIndex=1
+log4j.appender.FOILEN.layout=org.apache.log4j.PatternLayout
+log4j.appender.FOILEN.layout.ConversionPattern=%-5p %d{HH:mm:ss,SSS} | %c | %m%n
+
 log4j.appender.MAILBOXMANAGER=org.apache.log4j.RollingFileAppender
 log4j.appender.MAILBOXMANAGER.File=../log/mailboxmanager.log
 log4j.appender.MAILBOXMANAGER.MaxFileSize=100MB
@@ -473,8 +480,8 @@ log4j.logger.org.apache.activemq=WARN, CONS, FILE
 log4j.logger.org.apache.camel=WARN, CONS, FILE
 log4j.logger.org.springframework=WARN, CONS, FILE
 log4j.logger.org.apache.james=INFO, CONS, FILE
+log4j.logger.com.foilen=DEBUG, CONS, FILE, FOILEN
 
-log4j.logger.org.apache.james=WARN, CONS, FILE
 log4j.logger=DEBUG, CONS, FILE
 
 log4j.logger.org.apache.james.mailboxmanager=INFO, MAILBOXMANAGER
