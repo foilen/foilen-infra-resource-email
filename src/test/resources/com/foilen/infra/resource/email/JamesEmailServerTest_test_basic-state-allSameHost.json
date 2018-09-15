@@ -1268,7 +1268,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
         } ],
         "environments" : { },
         "executeWhenStartedCommands" : [ ],
-        "from" : "foilen/fcloud-docker-email:3.1.0-1",
+        "from" : "foilen/fcloud-docker-email:3.1.0-2",
         "hostToIpMapping" : [ ],
         "portsEndpoint" : {
           "10025" : "SMTP_TCP"

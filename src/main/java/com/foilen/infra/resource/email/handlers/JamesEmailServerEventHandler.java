@@ -168,7 +168,7 @@ public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResou
             application.setApplicationDefinition(applicationDefinition);
             applicationDefinition.setRunAs(unixUserId);
 
-            applicationDefinition.setFrom("foilen/fcloud-docker-email:3.1.0-1");
+            applicationDefinition.setFrom("foilen/fcloud-docker-email:3.1.0-2");
 
             // Start script
             IPApplicationDefinitionAssetsBundle assetsBundle = applicationDefinition.addAssetsBundle();
