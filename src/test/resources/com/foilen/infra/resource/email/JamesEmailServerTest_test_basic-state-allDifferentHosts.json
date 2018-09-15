@@ -994,10 +994,17 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
 
     <processor state=\"transport\" enableJmx=\"true\">
     
+      <mailet match=\"All\" class=\"com.foilen.james.components.mailet.LogInfo\">
+        <text>Is in transport</text>
+      </mailet>
+    
       <!-- Add some headers -->
       <mailet match=\"SMTPAuthSuccessful\" class=\"SetMimeHeader\">
         <name>X-UserIsAuth</name>
         <value>true</value>
+      </mailet>
+      <mailet match=\"HasMailAttribute=X-UserIsAuth\" class=\"com.foilen.james.components.mailet.LogInfo\">
+        <text>User is SMTPAuthSuccessful</text>
       </mailet>
 
       <mailet match=\"HasMailAttribute=org.apache.james.SMIMECheckSignature\" class=\"SetMimeHeader\">
@@ -1010,31 +1017,52 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
       	<cacheMaxTimeInSeconds>10</cacheMaxTimeInSeconds>
       	<cacheMaxEntries>1000</cacheMaxEntries>
       </mailet>
+      <mailet match=\"HasMailAttribute=isRedirection\" class=\"com.foilen.james.components.mailet.LogInfo\">
+        <text>Recipient is ExactAndCatchAllRedirections</text>
+      </mailet>
 
       <!-- Local delivery -->
+      <mailet match=\"RecipientIsLocal\" class=\"com.foilen.james.components.mailet.LogInfo\">
+        <text>Recipient is Local</text>
+      </mailet>
       <mailet match=\"RecipientIsLocal\" class=\"AddDeliveredToHeader\" />
       <mailet match=\"RecipientIsLocal\" class=\"LocalDelivery\" />
 
       <!-- Local delivery - The domain is managed locally, but the local mailbox does not exist -->
+      <mailet match=\"HostIsLocal\" class=\"com.foilen.james.components.mailet.LogInfo\">
+        <text>Recipient host is local, but the recipient is not found</text>
+      </mailet>
       <mailet match=\"HostIsLocal\" class=\"ToProcessor\">
         <processor>local-address-error</processor>
         <notice>550 - Requested action not taken: no such user here</notice>
       </mailet>
       
       <!-- Remote delivery when destination was changed by ExactAndCatchAllRedirections -->
+      <mailet match=\"HasMailAttribute=isRedirection\" class=\"com.foilen.james.components.mailet.LogInfo\">
+        <text>Remote delivery when destination was changed by ExactAndCatchAllRedirections</text>
+      </mailet>
       <mailet match=\"HasMailAttribute=isRedirection\" class=\"ToProcessor\">
         <processor>auth-user-relay</processor>
       </mailet>
 
       <!-- Is a user and needs to relay his emails -->
+      <mailet match=\"SentByMailet\" class=\"com.foilen.james.components.mailet.LogInfo\">
+        <text>Relay since SentByMailet</text>
+      </mailet>
       <mailet match=\"SentByMailet\" class=\"ToProcessor\">
       	<processor>auth-user-relay</processor>
+      </mailet>
+      <mailet match=\"com.foilen.james.components.matcher.SenderIsLocalAndSameAsSMTPAuth\" class=\"com.foilen.james.components.mailet.LogInfo\">
+        <text>Relay since SenderIsLocalAndSameAsSMTPAuth</text>
       </mailet>
       <mailet match=\"com.foilen.james.components.matcher.SenderIsLocalAndSameAsSMTPAuth\" class=\"ToProcessor\">
       	<processor>auth-user-relay</processor>
       </mailet>
 
       <!-- Not an open relay -->
+      <mailet match=\"com.foilen.james.components.matcher.SenderIsLocalAndSameAsSMTPAuth\" class=\"com.foilen.james.components.mailet.LogInfo\">
+        <text>Not an open relay</text>
+      </mailet>
       <mailet match=\"All\" class=\"ToProcessor\">
         <processor>relay-denied</processor>
         <notice>550 - Requested action not taken: relaying denied</notice>
@@ -1147,18 +1175,18 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
 
     <processor state=\"bounces\" enableJmx=\"true\">
     
-      <mailet match=\"All\" class=\"NotifyPostmaster\">
-        <sender>unaltered</sender>
-        <attachError>true</attachError>
-        <prefix>[BOUNCE]</prefix>
-        <passThrough>true</passThrough>
-        <to>postmaster</to>
-        <debug>true</debug>
-      </mailet>
+        <mailet match=\"All\" class=\"NotifyPostmaster\">
+          <sender>unaltered</sender>
+          <attachError>true</attachError>
+          <prefix>[BOUNCE]</prefix>
+          <passThrough>true</passThrough>
+          <to>postmaster</to>
+          <debug>true</debug>
+        </mailet>
       
-      <mailet match=\"All\" class=\"DSNBounce\">
-        <passThrough>false</passThrough>
-      </mailet>
+        <mailet match=\"All\" class=\"DSNBounce\">
+          <passThrough>false</passThrough>
+        </mailet>
       
     </processor>
 
@@ -1682,6 +1710,8 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
     } ],
     "tags" : [ ],
     "content" : {
+      "disableBounceNotifyPostmaster" : false,
+      "disableBounceNotifySender" : false,
       "meta" : { },
       "name" : "james_server",
       "postmasterEmail" : "a1@example.com",

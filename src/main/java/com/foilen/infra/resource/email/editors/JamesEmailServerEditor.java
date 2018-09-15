@@ -38,6 +38,14 @@ public class JamesEmailServerEditor extends SimpleResourceEditor<JamesEmailServe
             fieldConfigConsumer.addValidator(CommonValidation::validateNotNullOrEmpty);
             fieldConfigConsumer.addValidator(CommonValidation::validateEmail);
         });
+        simpleResourceEditorDefinition.addInputText(JamesEmailServer.PROPERTY_DISABLE_BOUNCE_NOTIFY_POSTMASTER, fieldConfigConsumer -> {
+            fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
+            fieldConfigConsumer.addFormator(value -> "true".equalsIgnoreCase(value) ? "true" : "false");
+        });
+        simpleResourceEditorDefinition.addInputText(JamesEmailServer.PROPERTY_DISABLE_BOUNCE_NOTIFY_SENDER, fieldConfigConsumer -> {
+            fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
+            fieldConfigConsumer.addFormator(value -> "true".equalsIgnoreCase(value) ? "true" : "false");
+        });
 
         simpleResourceEditorDefinition.addResource("mariaDBServer", "ATTACHED", AttachableMariaDB.class);
         simpleResourceEditorDefinition.addResource("mariaDBDatabase", LinkTypeConstants.USES, MariaDBDatabase.class);

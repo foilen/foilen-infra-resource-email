@@ -41,9 +41,31 @@ public class JamesEmailServer extends EmailServer {
 
     public static final String RESOURCE_TYPE = "Apache James Email Server";
 
+    public static final String PROPERTY_DISABLE_BOUNCE_NOTIFY_POSTMASTER = "disableBounceNotifyPostmaster";
+    public static final String PROPERTY_DISABLE_BOUNCE_NOTIFY_SENDER = "disableBounceNotifySender";
+
+    private boolean disableBounceNotifyPostmaster;
+    private boolean disableBounceNotifySender;
+
     @Override
     public String getResourceDescription() {
         return "Apache James email server";
+    }
+
+    public boolean isDisableBounceNotifyPostmaster() {
+        return disableBounceNotifyPostmaster;
+    }
+
+    public boolean isDisableBounceNotifySender() {
+        return disableBounceNotifySender;
+    }
+
+    public void setDisableBounceNotifyPostmaster(boolean disableBounceNotifyPostmaster) {
+        this.disableBounceNotifyPostmaster = disableBounceNotifyPostmaster;
+    }
+
+    public void setDisableBounceNotifySender(boolean disableBounceNotifySender) {
+        this.disableBounceNotifySender = disableBounceNotifySender;
     }
 
 }

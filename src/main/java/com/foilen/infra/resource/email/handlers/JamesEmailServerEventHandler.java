@@ -177,6 +177,8 @@ public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResou
             // Config files
             Map<String, Object> model = new HashMap<>();
             model.put("postmasterEmail", jamesEmailServer.getPostmasterEmail());
+            model.put("disableBounceNotifyPostmaster", jamesEmailServer.isDisableBounceNotifyPostmaster());
+            model.put("disableBounceNotifySender", jamesEmailServer.isDisableBounceNotifySender());
             model.put("dbName", mariadbDatabase.getName());
             model.put("dbUser", mariadbUser.getName());
             model.put("dbPass", mariadbUser.getPassword());
