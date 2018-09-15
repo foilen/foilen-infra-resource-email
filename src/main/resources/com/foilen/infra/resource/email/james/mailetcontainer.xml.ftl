@@ -245,7 +245,7 @@
         </mailet>
       </#if>
       
-      <#if !disableBounceNotifyPostmaster >
+      <#if !disableBounceNotifySender >
         <mailet match="All" class="DSNBounce">
           <passThrough>false</passThrough>
         </mailet>
