@@ -225,11 +225,13 @@
           <sender>unaltered</sender>
           <attachError>true</attachError>
           <prefix>[RELAY-DENIED]</prefix>
-          <passThrough>false</passThrough>
+          <passThrough>true</passThrough>
           <to>postmaster</to>
           <debug>true</debug>
         </mailet>
       </#if>
+
+      <mailet match="All" class="Null" />
       
     </processor>
 
@@ -249,9 +251,11 @@
       
       <#if !disableBounceNotifySender >
         <mailet match="All" class="DSNBounce">
-          <passThrough>false</passThrough>
+          <passThrough>true</passThrough>
         </mailet>
       </#if>
+      
+      <mailet match="All" class="Null" />
       
     </processor>
 

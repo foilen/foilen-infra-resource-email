@@ -1187,10 +1187,12 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
           <sender>unaltered</sender>
           <attachError>true</attachError>
           <prefix>[RELAY-DENIED]</prefix>
-          <passThrough>false</passThrough>
+          <passThrough>true</passThrough>
           <to>postmaster</to>
           <debug>true</debug>
         </mailet>
+
+      <mailet match=\"All\" class=\"Null\" />
       
     </processor>
 
@@ -1207,8 +1209,10 @@ log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
         </mailet>
       
         <mailet match=\"All\" class=\"DSNBounce\">
-          <passThrough>false</passThrough>
+          <passThrough>true</passThrough>
         </mailet>
+      
+      <mailet match=\"All\" class=\"Null\" />
       
     </processor>
 
