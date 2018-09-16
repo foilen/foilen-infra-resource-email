@@ -220,14 +220,16 @@
 
     <processor state="relay-denied" enableJmx="true">
     
-      <mailet match="All" class="NotifyPostmaster">
-        <sender>unaltered</sender>
-        <attachError>true</attachError>
-        <prefix>[RELAY-DENIED]</prefix>
-        <passThrough>false</passThrough>
-        <to>postmaster</to>
-        <debug>true</debug>
-      </mailet>
+      <#if !disableRelayDeniedNotifyPostmaster >
+        <mailet match="All" class="NotifyPostmaster">
+          <sender>unaltered</sender>
+          <attachError>true</attachError>
+          <prefix>[RELAY-DENIED]</prefix>
+          <passThrough>false</passThrough>
+          <to>postmaster</to>
+          <debug>true</debug>
+        </mailet>
+      </#if>
       
     </processor>
 

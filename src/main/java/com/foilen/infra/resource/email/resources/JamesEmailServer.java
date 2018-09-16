@@ -43,9 +43,11 @@ public class JamesEmailServer extends EmailServer {
 
     public static final String PROPERTY_DISABLE_BOUNCE_NOTIFY_POSTMASTER = "disableBounceNotifyPostmaster";
     public static final String PROPERTY_DISABLE_BOUNCE_NOTIFY_SENDER = "disableBounceNotifySender";
+    public static final String PROPERTY_DISABLE_RELAY_DENIED_NOTIFY_SENDER = "disableRelayDeniedNotifyPostmaster";
 
     private boolean disableBounceNotifyPostmaster;
     private boolean disableBounceNotifySender;
+    private boolean disableRelayDeniedNotifyPostmaster;
 
     @Override
     public String getResourceDescription() {
@@ -60,12 +62,20 @@ public class JamesEmailServer extends EmailServer {
         return disableBounceNotifySender;
     }
 
+    public boolean isDisableRelayDeniedNotifyPostmaster() {
+        return disableRelayDeniedNotifyPostmaster;
+    }
+
     public void setDisableBounceNotifyPostmaster(boolean disableBounceNotifyPostmaster) {
         this.disableBounceNotifyPostmaster = disableBounceNotifyPostmaster;
     }
 
     public void setDisableBounceNotifySender(boolean disableBounceNotifySender) {
         this.disableBounceNotifySender = disableBounceNotifySender;
+    }
+
+    public void setDisableRelayDeniedNotifyPostmaster(boolean disableRelayDeniedNotifyPostmaster) {
+        this.disableRelayDeniedNotifyPostmaster = disableRelayDeniedNotifyPostmaster;
     }
 
 }

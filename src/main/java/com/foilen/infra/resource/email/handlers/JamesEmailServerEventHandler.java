@@ -179,6 +179,7 @@ public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResou
             model.put("postmasterEmail", jamesEmailServer.getPostmasterEmail());
             model.put("disableBounceNotifyPostmaster", jamesEmailServer.isDisableBounceNotifyPostmaster());
             model.put("disableBounceNotifySender", jamesEmailServer.isDisableBounceNotifySender());
+            model.put("disableRelayDeniedNotifyPostmaster", jamesEmailServer.isDisableRelayDeniedNotifyPostmaster());
             model.put("dbName", mariadbDatabase.getName());
             model.put("dbUser", mariadbUser.getName());
             model.put("dbPass", mariadbUser.getPassword());
