@@ -202,6 +202,7 @@ public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResou
             assetsBundle.addAssetResource("/james-server-app/conf/sieverepository.xml", "/com/foilen/infra/resource/email/james/sieverepository.xml");
             assetsBundle.addAssetResource("/james-server-app/conf/smtpserver.xml", "/com/foilen/infra/resource/email/james/smtpserver.xml");
             assetsBundle.addAssetResource("/james-server-app/conf/usersrepository.xml", "/com/foilen/infra/resource/email/james/usersrepository.xml");
+            assetsBundle.addAssetResource("/james-server-app/conf/wrapper.conf", "/com/foilen/infra/resource/email/james/wrapper.conf");
 
             // Keystores
             assetsBundle.addAssetContent("/james-server-app/conf/keystore-imaps", createKeystore(context, jamesEmailServer, "imaps", certsImap));

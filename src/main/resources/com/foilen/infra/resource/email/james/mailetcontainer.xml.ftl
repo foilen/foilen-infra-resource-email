@@ -117,7 +117,7 @@
       </mailet>
 
       <!-- Not an open relay -->
-      <mailet match="com.foilen.james.components.matcher.SenderIsLocalAndSameAsSMTPAuth" class="com.foilen.james.components.mailet.LogInfo">
+      <mailet match="All" class="com.foilen.james.components.mailet.LogInfo">
         <text>Not an open relay</text>
       </mailet>
       <mailet match="All" class="ToProcessor">
