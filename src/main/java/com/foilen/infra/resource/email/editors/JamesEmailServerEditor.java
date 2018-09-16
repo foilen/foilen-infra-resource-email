@@ -46,6 +46,10 @@ public class JamesEmailServerEditor extends SimpleResourceEditor<JamesEmailServe
             fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
             fieldConfigConsumer.addFormator(value -> "true".equalsIgnoreCase(value) ? "true" : "false");
         });
+        simpleResourceEditorDefinition.addInputText(JamesEmailServer.PROPERTY_DISABLE_RELAY_DENIED_NOTIFY_SENDER, fieldConfigConsumer -> {
+            fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
+            fieldConfigConsumer.addFormator(value -> "true".equalsIgnoreCase(value) ? "true" : "false");
+        });
 
         simpleResourceEditorDefinition.addResource("mariaDBServer", "ATTACHED", AttachableMariaDB.class);
         simpleResourceEditorDefinition.addResource("mariaDBDatabase", LinkTypeConstants.USES, MariaDBDatabase.class);
