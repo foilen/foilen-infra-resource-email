@@ -1555,7 +1555,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "reverseName" : "com.example.mail"
     }
   }, {
-    "resource" : "EmailAccount | a1 | Email Domain",
+    "resource" : "EmailAccount | a1 | Email Account",
     "links" : [ {
       "type" : "INSTALLED_ON",
       "to" : "EmailDomain | example.com | Email Domain"
@@ -1565,14 +1565,14 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "accountName" : "a1",
       "meta" : { },
       "resourceCategory" : "EMAIL",
-      "resourceDescription" : "Email Domain",
+      "resourceDescription" : "Email Account",
       "resourceEditorName" : "Email Account",
       "resourceName" : "a1",
       "sha512Password" : "0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8",
       "uid" : "73UEG0v7nw"
     }
   }, {
-    "resource" : "EmailAccount | a2 | Email Domain",
+    "resource" : "EmailAccount | a2 | Email Account",
     "links" : [ {
       "type" : "INSTALLED_ON",
       "to" : "EmailDomain | example.com | Email Domain"
@@ -1582,14 +1582,14 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "accountName" : "a2",
       "meta" : { },
       "resourceCategory" : "EMAIL",
-      "resourceDescription" : "Email Domain",
+      "resourceDescription" : "Email Account",
       "resourceEditorName" : "Email Account",
       "resourceName" : "a2",
       "sha512Password" : "0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8",
       "uid" : "GOAFqspNow"
     }
   }, {
-    "resource" : "EmailAccount | a3 | Email Domain",
+    "resource" : "EmailAccount | a3 | Email Account",
     "links" : [ {
       "type" : "INSTALLED_ON",
       "to" : "EmailDomain | example.com | Email Domain"
@@ -1599,14 +1599,14 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "accountName" : "a3",
       "meta" : { },
       "resourceCategory" : "EMAIL",
-      "resourceDescription" : "Email Domain",
+      "resourceDescription" : "Email Account",
       "resourceEditorName" : "Email Account",
       "resourceName" : "a3",
       "sha512Password" : "0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8",
       "uid" : "pIxmZ6dZ5A"
     }
   }, {
-    "resource" : "EmailAccount | a4 | Email Domain",
+    "resource" : "EmailAccount | a4 | Email Account",
     "links" : [ {
       "type" : "INSTALLED_ON",
       "to" : "EmailDomain | example.com | Email Domain"
@@ -1616,14 +1616,14 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "accountName" : "a4",
       "meta" : { },
       "resourceCategory" : "EMAIL",
-      "resourceDescription" : "Email Domain",
+      "resourceDescription" : "Email Account",
       "resourceEditorName" : "Email Account",
       "resourceName" : "a4",
       "sha512Password" : "0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8",
       "uid" : "mLP4pstR/A"
     }
   }, {
-    "resource" : "EmailAccount | any | Email Domain",
+    "resource" : "EmailAccount | any | Email Account",
     "links" : [ {
       "type" : "INSTALLED_ON",
       "to" : "EmailDomain | example.com | Email Domain"
@@ -1633,7 +1633,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "accountName" : "any",
       "meta" : { },
       "resourceCategory" : "EMAIL",
-      "resourceDescription" : "Email Domain",
+      "resourceDescription" : "Email Account",
       "resourceEditorName" : "Email Account",
       "resourceName" : "any",
       "sha512Password" : "0dd3e512642c97ca3f747f9a76e374fbda73f9292823c0313be9d78add7cdd8f72235af0c553dd26797e78e1854edee0ae002f8aba074b066dfce1af114e32f8",
@@ -1658,7 +1658,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "to" : "Domain | mail.example.com | Domain for mail.example.com"
     }, {
       "type" : "SEND_THROUGHT",
-      "to" : "EmailRelay | example-relay | Email Relay"
+      "to" : "EmailRelay | example-relay | relay.example.com:587 AAA"
     } ],
     "tags" : [ ],
     "content" : {
@@ -1673,7 +1673,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "resourceName" : "example.com"
     }
   }, {
-    "resource" : "EmailRedirection |  | Email Domain",
+    "resource" : "EmailRedirection |  | Redirect to: any@example.com",
     "links" : [ {
       "type" : "INSTALLED_ON",
       "to" : "EmailDomain | example.com | Email Domain"
@@ -1684,13 +1684,13 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "meta" : { },
       "redirectTos" : [ "any@example.com" ],
       "resourceCategory" : "EMAIL",
-      "resourceDescription" : "Email Domain",
+      "resourceDescription" : "Redirect to: any@example.com",
       "resourceEditorName" : "Email Redirection",
       "resourceName" : "",
       "uid" : "X9jXEYBc4Q"
     }
   }, {
-    "resource" : "EmailRedirection | r1 | Email Domain",
+    "resource" : "EmailRedirection | r1 | Redirect to: a2@example.com, a1@example.com",
     "links" : [ {
       "type" : "INSTALLED_ON",
       "to" : "EmailDomain | example.com | Email Domain"
@@ -1701,13 +1701,13 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "meta" : { },
       "redirectTos" : [ "a2@example.com", "a1@example.com" ],
       "resourceCategory" : "EMAIL",
-      "resourceDescription" : "Email Domain",
+      "resourceDescription" : "Redirect to: a2@example.com, a1@example.com",
       "resourceEditorName" : "Email Redirection",
       "resourceName" : "r1",
       "uid" : "rbXfHd5YsA"
     }
   }, {
-    "resource" : "EmailRelay | example-relay | Email Relay",
+    "resource" : "EmailRelay | example-relay | relay.example.com:587 AAA",
     "links" : [ ],
     "tags" : [ ],
     "content" : {
@@ -1717,7 +1717,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "password" : "BBB",
       "port" : 587,
       "resourceCategory" : "EMAIL",
-      "resourceDescription" : "Email Relay",
+      "resourceDescription" : "relay.example.com:587 AAA",
       "resourceEditorName" : "Email Relay",
       "resourceName" : "example-relay",
       "username" : "AAA"

@@ -14,6 +14,7 @@ import java.util.Set;
 import com.foilen.infra.plugin.v1.model.resource.AbstractIPResource;
 import com.foilen.infra.plugin.v1.model.resource.InfraPluginResourceCategory;
 import com.foilen.smalltools.tools.SecureRandomTools;
+import com.google.common.base.Joiner;
 
 /**
  * This is a redirection on a domain.<br/>
@@ -54,7 +55,7 @@ public class EmailRedirection extends AbstractIPResource {
 
     @Override
     public String getResourceDescription() {
-        return "Email Domain";
+        return "Redirect to: " + Joiner.on(", ").join(redirectTos);
     }
 
     @Override

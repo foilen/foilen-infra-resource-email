@@ -52,7 +52,7 @@ public class EmailRelay extends AbstractIPResource {
 
     @Override
     public String getResourceDescription() {
-        return "Email Relay";
+        return hostname + ":" + port + " " + username;
     }
 
     @Override

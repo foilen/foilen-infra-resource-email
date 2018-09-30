@@ -48,7 +48,7 @@ public class EmailAccount extends AbstractIPResource {
 
     @Override
     public String getResourceDescription() {
-        return "Email Domain";
+        return "Email Account";
     }
 
     @Override
