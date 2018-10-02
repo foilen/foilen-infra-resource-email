@@ -1220,6 +1220,9 @@ configuration.directory.in.classpath.last=../conf/lib/*
     
       <!-- Relay emails per domain to different gateways -->
       
+        <mailet match=\"SenderIsRegex=(.*)@example.com\" class=\"com.foilen.james.components.mailet.LogInfo\">
+          <text>Remote delivery via the gateway for SenderIsRegex=(.*)@example.com</text>
+        </mailet>
         <mailet match=\"SenderIsRegex=(.*)@example.com\" class=\"RemoteDelivery\">
           <outgoingQueue>outgoing</outgoingQueue>
     
@@ -1236,6 +1239,9 @@ configuration.directory.in.classpath.last=../conf/lib/*
         </mailet>
       
       <!-- Relay -->
+      <mailet match=\"All\" class=\"com.foilen.james.components.mailet.LogInfo\">
+        <text>Remote delivery via the server directly (no gateway)</text>
+      </mailet>
       <mailet match=\"All\" class=\"RemoteDelivery\">
         <outgoingQueue>outgoing</outgoingQueue>
 

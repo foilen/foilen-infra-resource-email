@@ -133,6 +133,9 @@
       <!-- Relay emails per domain to different gateways -->
       <#list domainAndRelais as domainAndRelay>
       
+        <mailet match="SenderIsRegex=(.*)@${domainAndRelay.a}" class="com.foilen.james.components.mailet.LogInfo">
+          <text>Remote delivery via the gateway for SenderIsRegex=(.*)@${domainAndRelay.a}</text>
+        </mailet>
         <mailet match="SenderIsRegex=(.*)@${domainAndRelay.a}" class="RemoteDelivery">
           <outgoingQueue>outgoing</outgoingQueue>
     
@@ -150,6 +153,9 @@
       </#list>
       
       <!-- Relay -->
+      <mailet match="All" class="com.foilen.james.components.mailet.LogInfo">
+        <text>Remote delivery via the server directly (no gateway)</text>
+      </mailet>
       <mailet match="All" class="RemoteDelivery">
         <outgoingQueue>outgoing</outgoingQueue>
 
