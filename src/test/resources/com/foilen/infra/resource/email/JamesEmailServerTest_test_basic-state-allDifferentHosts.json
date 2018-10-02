@@ -1395,7 +1395,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
         } ],
         "environments" : { },
         "executeWhenStartedCommands" : [ ],
-        "from" : "foilen/fcloud-docker-email:3.1.0-2",
+        "from" : "foilen/fcloud-docker-email:3.1.0-3",
         "hostToIpMapping" : [ ],
         "portsEndpoint" : {
           "10025" : "SMTP_TCP"
