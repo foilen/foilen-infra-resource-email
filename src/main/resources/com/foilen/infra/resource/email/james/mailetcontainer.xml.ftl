@@ -145,7 +145,7 @@
           <text>Remote delivery via the gateway for SenderIsRegex=(.*)@${domainAndRelay.a}</text>
         </mailet>
         <mailet match="SenderIsRegex=(.*)@${domainAndRelay.a}" class="RemoteDelivery">
-          <outgoingQueue>outgoing</outgoingQueue>
+          <outgoing>outgoing-${domainAndRelay.a}</outgoing>
     
           <delayTime>5000, 100000, 500000</delayTime>
           <maxRetries>25</maxRetries>
@@ -165,7 +165,7 @@
         <text>Remote delivery via the server directly (no gateway)</text>
       </mailet>
       <mailet match="All" class="RemoteDelivery">
-        <outgoingQueue>outgoing</outgoingQueue>
+        <outgoing>outgoing</outgoing>
 
         <delayTime>5000, 100000, 500000</delayTime>
         <maxRetries>25</maxRetries>

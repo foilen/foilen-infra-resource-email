@@ -1226,7 +1226,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
           <text>Remote delivery via the gateway for SenderIsRegex=(.*)@example.com</text>
         </mailet>
         <mailet match=\"SenderIsRegex=(.*)@example.com\" class=\"RemoteDelivery\">
-          <outgoingQueue>outgoing</outgoingQueue>
+          <outgoing>outgoing-example.com</outgoing>
     
           <delayTime>5000, 100000, 500000</delayTime>
           <maxRetries>25</maxRetries>
@@ -1245,7 +1245,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
         <text>Remote delivery via the server directly (no gateway)</text>
       </mailet>
       <mailet match=\"All\" class=\"RemoteDelivery\">
-        <outgoingQueue>outgoing</outgoingQueue>
+        <outgoing>outgoing</outgoing>
 
         <delayTime>5000, 100000, 500000</delayTime>
         <maxRetries>25</maxRetries>
