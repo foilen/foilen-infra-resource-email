@@ -1142,6 +1142,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
       <mailet match=\"All\" class=\"com.foilen.james.components.mailet.LogInfo\">
         <text>Is in transport</text>
       </mailet>
+      
     
       <!-- Add some headers -->
       <mailet match=\"SMTPAuthSuccessful\" class=\"SetMimeHeader\">
@@ -1217,6 +1218,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
 
 
     <processor state=\"auth-user-relay\" enableJmx=\"true\">
+    
     
       <!-- Relay emails per domain to different gateways -->
       
@@ -1868,6 +1870,8 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "disableBounceNotifyPostmaster" : false,
       "disableBounceNotifySender" : false,
       "disableRelayDeniedNotifyPostmaster" : false,
+      "enableDebugDumpMessagesDetails" : false,
+      "enableDebuglogs" : false,
       "meta" : { },
       "name" : "james_server",
       "postmasterEmail" : "a1@example.com",

@@ -50,6 +50,14 @@ public class JamesEmailServerEditor extends SimpleResourceEditor<JamesEmailServe
             fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
             fieldConfigConsumer.addFormator(value -> "true".equalsIgnoreCase(value) ? "true" : "false");
         });
+        simpleResourceEditorDefinition.addInputText(JamesEmailServer.PROPERTY_ENABLE_DEBUG_LOGS, fieldConfigConsumer -> {
+            fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
+            fieldConfigConsumer.addFormator(value -> "true".equalsIgnoreCase(value) ? "true" : "false");
+        });
+        simpleResourceEditorDefinition.addInputText(JamesEmailServer.PROPERTY_ENABLE_DEBUG_DUMP_MESSAGES_DETAILS, fieldConfigConsumer -> {
+            fieldConfigConsumer.addFormator(CommonFormatting::trimSpacesAround);
+            fieldConfigConsumer.addFormator(value -> "true".equalsIgnoreCase(value) ? "true" : "false");
+        });
 
         simpleResourceEditorDefinition.addResource("mariaDBServer", "ATTACHED", AttachableMariaDB.class);
         simpleResourceEditorDefinition.addResource("mariaDBDatabase", LinkTypeConstants.USES, MariaDBDatabase.class);

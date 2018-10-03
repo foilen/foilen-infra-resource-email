@@ -180,6 +180,7 @@ public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResou
             model.put("disableBounceNotifyPostmaster", jamesEmailServer.isDisableBounceNotifyPostmaster());
             model.put("disableBounceNotifySender", jamesEmailServer.isDisableBounceNotifySender());
             model.put("disableRelayDeniedNotifyPostmaster", jamesEmailServer.isDisableRelayDeniedNotifyPostmaster());
+            model.put("enableDebugDumpMessagesDetails", jamesEmailServer.isEnableDebugDumpMessagesDetails());
             model.put("dbName", mariadbDatabase.getName());
             model.put("dbUser", mariadbUser.getName());
             model.put("dbPass", mariadbUser.getPassword());
@@ -192,7 +193,11 @@ public class JamesEmailServerEventHandler extends AbstractFinalStateManagedResou
                     FreemarkerTools.processTemplate("/com/foilen/infra/resource/email/james/james-database.properties.ftl", model));
             assetsBundle.addAssetResource("/james-server-app/conf/jmx.properties", "/com/foilen/infra/resource/email/james/jmx.properties");
             assetsBundle.addAssetResource("/james-server-app/conf/lmtpserver.xml", "/com/foilen/infra/resource/email/james/lmtpserver.xml");
-            assetsBundle.addAssetResource("/james-server-app/conf/log4j.properties", "/com/foilen/infra/resource/email/james/log4j.properties");
+            if (jamesEmailServer.isEnableDebuglogs()) {
+                assetsBundle.addAssetResource("/james-server-app/conf/log4j.properties", "/com/foilen/infra/resource/email/james/log4j-debug.properties");
+            } else {
+                assetsBundle.addAssetResource("/james-server-app/conf/log4j.properties", "/com/foilen/infra/resource/email/james/log4j.properties");
+            }
             assetsBundle.addAssetResource("/james-server-app/conf/mailbox.xml", "/com/foilen/infra/resource/email/james/mailbox.xml");
             assetsBundle.addAssetResource("/james-server-app/conf/mailrepositorystore.xml", "/com/foilen/infra/resource/email/james/mailrepositorystore.xml");
             assetsBundle.addAssetResource("/james-server-app/conf/managesieveserver.xml", "/com/foilen/infra/resource/email/james/managesieveserver.xml");

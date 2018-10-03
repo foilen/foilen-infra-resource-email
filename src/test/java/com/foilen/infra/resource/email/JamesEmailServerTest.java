@@ -109,4 +109,70 @@ public class JamesEmailServerTest extends AbstractIPPluginTest {
 
     }
 
+    @Test
+    public void test_basic_debug_mode() {
+
+        List<String> metaCertKeys = Arrays.asList( //
+                "certKeystore-imaps", "certKeystore-pop3s", "certKeystore-smtp", //
+                "certThumbprint-imaps", "certThumbprint-pop3s", "certThumbprint-smtp" //
+        );
+
+        IPResourceService resourceService = getCommonServicesContext().getResourceService();
+
+        // Execute the dump
+        ResourcesDump resourcesDump = JsonTools.readFromResource("JamesEmailServerTest_test_basic-import.json", ResourcesDump.class, getClass());
+        JunitsHelper.dumpImport(getCommonServicesContext(), getInternalServicesContext(), resourcesDump);
+
+        // Change the server to be in debug mode
+        JamesEmailServer jamesEmailServer = resourceService.resourceFind(resourceService.createResourceQuery(JamesEmailServer.class)).get();
+        jamesEmailServer.setEnableDebugDumpMessagesDetails(true);
+        jamesEmailServer.setEnableDebuglogs(true);
+        ChangesContext changes = new ChangesContext(resourceService);
+        changes.resourceUpdate(jamesEmailServer);
+        getInternalServicesContext().getInternalChangeService().changesExecute(changes);
+
+        // Remove the binary files that are always changing
+        removeBinaryFiles();
+
+        // Remove and get meta
+        Map<String, String> meta = getEmailServerMeta();
+        Map<String, String> metaCloned = JsonTools.clone(meta);
+        Assert.assertEquals(6, meta.size());
+        metaCertKeys.forEach(key -> {
+            Assert.assertNotNull(meta.remove(key));
+        });
+        Assert.assertEquals(0, meta.size());
+
+        // Assert
+        JunitsHelper.assertState(getCommonServicesContext(), getInternalServicesContext(), "JamesEmailServerTest_test_basic_debug_mode-state-allSameHost.json", getClass(), true);
+
+        // Put back meta
+        metaCertKeys.forEach(key -> {
+            meta.put(key, metaCloned.get(key));
+        });
+
+        // Change for all different hosts
+        Optional<EmailDomain> emailDomainOptional = resourceService.resourceFind(resourceService.createResourceQuery(EmailDomain.class));
+        EmailDomain emailDomain = emailDomainOptional.get();
+        emailDomain.setImapDomainName("imap.example.com");
+        emailDomain.setPop3DomainName("pop3.example.com");
+        changes = new ChangesContext(resourceService);
+        changes.resourceUpdate(emailDomain);
+        getInternalServicesContext().getInternalChangeService().changesExecute(changes);
+
+        // Remove the binary files that are always changing
+        removeBinaryFiles();
+
+        // Remove and assert same meta
+        Map<String, String> metaAfter = getEmailServerMeta();
+        Assert.assertEquals(6, metaAfter.size());
+        metaCertKeys.forEach(key -> {
+            Assert.assertNotNull(metaCloned.get(key), metaAfter.remove(key));
+        });
+        Assert.assertEquals(0, metaAfter.size());
+
+        JunitsHelper.assertState(getCommonServicesContext(), getInternalServicesContext(), "JamesEmailServerTest_test_basic_debug_mode-state-allDifferentHosts.json", getClass(), true);
+
+    }
+
 }

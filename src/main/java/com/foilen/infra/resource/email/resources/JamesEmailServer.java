@@ -45,9 +45,15 @@ public class JamesEmailServer extends EmailServer {
     public static final String PROPERTY_DISABLE_BOUNCE_NOTIFY_SENDER = "disableBounceNotifySender";
     public static final String PROPERTY_DISABLE_RELAY_DENIED_NOTIFY_SENDER = "disableRelayDeniedNotifyPostmaster";
 
+    public static final String PROPERTY_ENABLE_DEBUG_LOGS = "enableDebuglogs";
+    public static final String PROPERTY_ENABLE_DEBUG_DUMP_MESSAGES_DETAILS = "enableDebugDumpMessagesDetails";
+
     private boolean disableBounceNotifyPostmaster;
     private boolean disableBounceNotifySender;
     private boolean disableRelayDeniedNotifyPostmaster;
+
+    private boolean enableDebuglogs;
+    private boolean enableDebugDumpMessagesDetails;
 
     @Override
     public String getResourceDescription() {
@@ -66,6 +72,14 @@ public class JamesEmailServer extends EmailServer {
         return disableRelayDeniedNotifyPostmaster;
     }
 
+    public boolean isEnableDebugDumpMessagesDetails() {
+        return enableDebugDumpMessagesDetails;
+    }
+
+    public boolean isEnableDebuglogs() {
+        return enableDebuglogs;
+    }
+
     public void setDisableBounceNotifyPostmaster(boolean disableBounceNotifyPostmaster) {
         this.disableBounceNotifyPostmaster = disableBounceNotifyPostmaster;
     }
@@ -76,6 +90,14 @@ public class JamesEmailServer extends EmailServer {
 
     public void setDisableRelayDeniedNotifyPostmaster(boolean disableRelayDeniedNotifyPostmaster) {
         this.disableRelayDeniedNotifyPostmaster = disableRelayDeniedNotifyPostmaster;
+    }
+
+    public void setEnableDebugDumpMessagesDetails(boolean enableDebugDumpMessagesDetails) {
+        this.enableDebugDumpMessagesDetails = enableDebugDumpMessagesDetails;
+    }
+
+    public void setEnableDebuglogs(boolean enableDebuglogs) {
+        this.enableDebuglogs = enableDebuglogs;
     }
 
 }

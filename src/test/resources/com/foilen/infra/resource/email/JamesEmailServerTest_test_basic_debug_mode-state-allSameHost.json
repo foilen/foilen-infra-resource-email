@@ -479,28 +479,28 @@ log4j.logger.org.apache.activemq=WARN, CONS, FILE
 
 log4j.logger.org.apache.camel=WARN, CONS, FILE
 log4j.logger.org.springframework=WARN, CONS, FILE
-log4j.logger.org.apache.james=INFO, CONS, FILE
+log4j.logger.org.apache.james=DEBUG, CONS, FILE
 log4j.logger.com.foilen=DEBUG, CONS, FILE, FOILEN
 
 log4j.logger=DEBUG, CONS, FILE
 
-log4j.logger.org.apache.james.mailboxmanager=INFO, MAILBOXMANAGER
-log4j.logger.org.apache.james.imapserver=INFO, IMAPSERVER
-log4j.logger.org.apache.james.mailetcontainer=INFO, MAILETCONTAINER
-log4j.logger.org.apache.james.mailetcontext=INFO, MAILETCONTAINER
-log4j.logger.org.apache.james.mailspooler=INFO, MAILETCONTAINER
-log4j.logger.org.apache.james.mailprocessor=INFO, MAILETCONTAINER
-log4j.logger.org.apache.james.dnsservice=INFO, DNSSERVICE
-log4j.logger.org.apache.james.pop3server=INFO, POP3SERVER
-log4j.logger.org.apache.james.smtpserver=INFO, SMTPSERVER
-log4j.logger.org.apache.james.lmtpserver=INFO, LMTPSERVER
-log4j.logger.org.apache.james.mailrepositorystore=INFO, MAILREPOSITORYSTORE
-log4j.logger.org.apache.james.usersrepository=INFO, USERSREPOSITORY
-log4j.logger.org.apache.james.fetchmail=INFO, FETCHMAIL
-log4j.logger.org.apache.james.domainlist=INFO, DOMAINLIST
-log4j.logger.org.apache.james.virtualusertable=INFO, VIRTUALUSERTABLE
-log4j.logger.org.apache.james.mailqueuefactory=INFO, MAILQUEUEFACTORY
-log4j.logger.etm.core.monitor.EtmMonitor= INFO, CONS, FILE
+log4j.logger.org.apache.james.mailboxmanager=DEBUG, MAILBOXMANAGER
+log4j.logger.org.apache.james.imapserver=DEBUG, IMAPSERVER
+log4j.logger.org.apache.james.mailetcontainer=DEBUG, MAILETCONTAINER
+log4j.logger.org.apache.james.mailetcontext=DEBUG, MAILETCONTAINER
+log4j.logger.org.apache.james.mailspooler=DEBUG, MAILETCONTAINER
+log4j.logger.org.apache.james.mailprocessor=DEBUG, MAILETCONTAINER
+log4j.logger.org.apache.james.dnsservice=DEBUG, DNSSERVICE
+log4j.logger.org.apache.james.pop3server=DEBUG, POP3SERVER
+log4j.logger.org.apache.james.smtpserver=DEBUG, SMTPSERVER
+log4j.logger.org.apache.james.lmtpserver=DEBUG, LMTPSERVER
+log4j.logger.org.apache.james.mailrepositorystore=DEBUG, MAILREPOSITORYSTORE
+log4j.logger.org.apache.james.usersrepository=DEBUG, USERSREPOSITORY
+log4j.logger.org.apache.james.fetchmail=DEBUG, FETCHMAIL
+log4j.logger.org.apache.james.domainlist=DEBUG, DOMAINLIST
+log4j.logger.org.apache.james.virtualusertable=DEBUG, VIRTUALUSERTABLE
+log4j.logger.org.apache.james.mailqueuefactory=DEBUG, MAILQUEUEFACTORY
+log4j.logger.etm.core.monitor.EtmMonitor= DEBUG, CONS, FILE
 "
           }, {
             "a" : "/james-server-app/conf/mailbox.xml",
@@ -1143,6 +1143,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
         <text>Is in transport</text>
       </mailet>
       
+        <mailet match=\"All\" class=\"com.foilen.james.components.mailet.DumpAllSystemErr\" />
     
       <!-- Add some headers -->
       <mailet match=\"SMTPAuthSuccessful\" class=\"SetMimeHeader\">
@@ -1219,6 +1220,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
 
     <processor state=\"auth-user-relay\" enableJmx=\"true\">
     
+        <mailet match=\"All\" class=\"com.foilen.james.components.mailet.DumpAllSystemErr\" />
     
       <!-- Relay emails per domain to different gateways -->
       
@@ -1765,8 +1767,8 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "disableBounceNotifyPostmaster" : false,
       "disableBounceNotifySender" : false,
       "disableRelayDeniedNotifyPostmaster" : false,
-      "enableDebugDumpMessagesDetails" : false,
-      "enableDebuglogs" : false,
+      "enableDebugDumpMessagesDetails" : true,
+      "enableDebuglogs" : true,
       "meta" : { },
       "name" : "james_server",
       "postmasterEmail" : "a1@example.com",

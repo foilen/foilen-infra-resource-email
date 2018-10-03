@@ -54,6 +54,10 @@
       <mailet match="All" class="com.foilen.james.components.mailet.LogInfo">
         <text>Is in transport</text>
       </mailet>
+      
+      <#if enableDebugDumpMessagesDetails >
+        <mailet match="All" class="com.foilen.james.components.mailet.DumpAllSystemErr" />
+      </#if>
     
       <!-- Add some headers -->
       <mailet match="SMTPAuthSuccessful" class="SetMimeHeader">
@@ -129,6 +133,10 @@
 
 
     <processor state="auth-user-relay" enableJmx="true">
+    
+      <#if enableDebugDumpMessagesDetails >
+        <mailet match="All" class="com.foilen.james.components.mailet.DumpAllSystemErr" />
+      </#if>
     
       <!-- Relay emails per domain to different gateways -->
       <#list domainAndRelais as domainAndRelay>
