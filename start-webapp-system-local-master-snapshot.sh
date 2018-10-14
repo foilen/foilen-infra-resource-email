@@ -18,7 +18,7 @@ docker run -ti \
   --volume $FOLDER_PLUGINS_JARS:/plugins \
   foilen-infra-system-app-test-docker:master-SNAPSHOT \
   download-latest-plugins \
-  /plugins application composableapplication dns domain machine mariadb unixuser webcertificate
+  /plugins application composableapplication dns machine mariadb unixuser webcertificate
 
 # Create release
 ./create-local-release-no-tests.sh

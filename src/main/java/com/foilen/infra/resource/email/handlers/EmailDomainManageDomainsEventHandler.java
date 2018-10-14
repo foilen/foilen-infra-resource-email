@@ -12,14 +12,12 @@ package com.foilen.infra.resource.email.handlers;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.foilen.infra.plugin.v1.core.common.DomainHelper;
 import com.foilen.infra.plugin.v1.core.context.ChangesContext;
 import com.foilen.infra.plugin.v1.core.context.CommonServicesContext;
 import com.foilen.infra.plugin.v1.core.eventhandler.AbstractCommonMethodUpdateEventHandler;
 import com.foilen.infra.plugin.v1.core.eventhandler.CommonMethodUpdateEventHandlerContext;
 import com.foilen.infra.plugin.v1.core.exception.IllegalUpdateException;
 import com.foilen.infra.plugin.v1.model.resource.LinkTypeConstants;
-import com.foilen.infra.resource.domain.Domain;
 import com.foilen.infra.resource.email.resources.EmailAccount;
 import com.foilen.infra.resource.email.resources.EmailDomain;
 import com.foilen.infra.resource.email.resources.EmailRedirection;
@@ -50,12 +48,6 @@ public class EmailDomainManageDomainsEventHandler extends AbstractCommonMethodUp
         if (services.getResourceService().linkFindAllByFromResourceAndLinkTypeAndToResourceClass(emailDomain, LinkTypeConstants.INSTALLED_ON, EmailServer.class).size() > 1) {
             throw new IllegalUpdateException("The email domain [" + emailDomain.getDomainName() + "] is installed on more than one Email server");
         }
-
-        // Add domains
-        context.getManagedResourceTypes().add(Domain.class);
-        context.getManagedResources().add(new Domain(emailDomain.getDomainName(), DomainHelper.reverseDomainName(emailDomain.getDomainName())));
-        context.getManagedResources().add(new Domain(emailDomain.getImapDomainName(), DomainHelper.reverseDomainName(emailDomain.getImapDomainName())));
-        context.getManagedResources().add(new Domain(emailDomain.getPop3DomainName(), DomainHelper.reverseDomainName(emailDomain.getPop3DomainName())));
 
     }
 

@@ -1462,10 +1462,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
     }
   }, {
     "resource" : "DnsEntry | example.com / MX | mail.example.com",
-    "links" : [ {
-      "type" : "MANAGES",
-      "to" : "Domain | example.com | Domain for example.com"
-    } ],
+    "links" : [ ],
     "tags" : [ ],
     "content" : {
       "details" : "mail.example.com",
@@ -1478,10 +1475,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
     }
   }, {
     "resource" : "DnsEntry | imap.example.com / A | 127.0.0.1",
-    "links" : [ {
-      "type" : "MANAGES",
-      "to" : "Domain | imap.example.com | Domain for imap.example.com"
-    } ],
+    "links" : [ ],
     "tags" : [ ],
     "content" : {
       "details" : "127.0.0.1",
@@ -1494,10 +1488,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
     }
   }, {
     "resource" : "DnsEntry | localhost / A | 127.0.0.1",
-    "links" : [ {
-      "type" : "MANAGES",
-      "to" : "Domain | localhost | Domain for localhost"
-    } ],
+    "links" : [ ],
     "tags" : [ ],
     "content" : {
       "details" : "127.0.0.1",
@@ -1510,10 +1501,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
     }
   }, {
     "resource" : "DnsEntry | mail.example.com / A | 127.0.0.1",
-    "links" : [ {
-      "type" : "MANAGES",
-      "to" : "Domain | mail.example.com | Domain for mail.example.com"
-    } ],
+    "links" : [ ],
     "tags" : [ ],
     "content" : {
       "details" : "127.0.0.1",
@@ -1526,10 +1514,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
     }
   }, {
     "resource" : "DnsEntry | pop3.example.com / A | 127.0.0.1",
-    "links" : [ {
-      "type" : "MANAGES",
-      "to" : "Domain | pop3.example.com | Domain for pop3.example.com"
-    } ],
+    "links" : [ ],
     "tags" : [ ],
     "content" : {
       "details" : "127.0.0.1",
@@ -1590,75 +1575,6 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "resourceCategory" : "NET",
       "resourceDescription" : "pop3.example.com",
       "resourceName" : "pop3.example.com"
-    }
-  }, {
-    "resource" : "Domain | example.com | Domain for example.com",
-    "links" : [ ],
-    "tags" : [ ],
-    "content" : {
-      "meta" : { },
-      "name" : "example.com",
-      "resourceCategory" : "NET",
-      "resourceDescription" : "Domain for example.com",
-      "resourceName" : "example.com",
-      "reverseName" : "com.example"
-    }
-  }, {
-    "resource" : "Domain | imap.example.com | Domain for imap.example.com",
-    "links" : [ {
-      "type" : "MANAGES",
-      "to" : "Domain | example.com | Domain for example.com"
-    } ],
-    "tags" : [ ],
-    "content" : {
-      "meta" : { },
-      "name" : "imap.example.com",
-      "resourceCategory" : "NET",
-      "resourceDescription" : "Domain for imap.example.com",
-      "resourceName" : "imap.example.com",
-      "reverseName" : "com.example.imap"
-    }
-  }, {
-    "resource" : "Domain | localhost | Domain for localhost",
-    "links" : [ ],
-    "tags" : [ ],
-    "content" : {
-      "meta" : { },
-      "name" : "localhost",
-      "resourceCategory" : "NET",
-      "resourceDescription" : "Domain for localhost",
-      "resourceName" : "localhost",
-      "reverseName" : "localhost"
-    }
-  }, {
-    "resource" : "Domain | mail.example.com | Domain for mail.example.com",
-    "links" : [ {
-      "type" : "MANAGES",
-      "to" : "Domain | example.com | Domain for example.com"
-    } ],
-    "tags" : [ ],
-    "content" : {
-      "meta" : { },
-      "name" : "mail.example.com",
-      "resourceCategory" : "NET",
-      "resourceDescription" : "Domain for mail.example.com",
-      "resourceName" : "mail.example.com",
-      "reverseName" : "com.example.mail"
-    }
-  }, {
-    "resource" : "Domain | pop3.example.com | Domain for pop3.example.com",
-    "links" : [ {
-      "type" : "MANAGES",
-      "to" : "Domain | example.com | Domain for example.com"
-    } ],
-    "tags" : [ ],
-    "content" : {
-      "meta" : { },
-      "name" : "pop3.example.com",
-      "resourceCategory" : "NET",
-      "resourceDescription" : "Domain for pop3.example.com",
-      "resourceName" : "pop3.example.com",
-      "reverseName" : "com.example.pop3"
     }
   }, {
     "resource" : "EmailAccount | a1 | Email Account",
@@ -1762,15 +1678,6 @@ configuration.directory.in.classpath.last=../conf/lib/*
     }, {
       "type" : "MANAGES",
       "to" : "DnsPointer | pop3.example.com | pop3.example.com"
-    }, {
-      "type" : "MANAGES",
-      "to" : "Domain | example.com | Domain for example.com"
-    }, {
-      "type" : "MANAGES",
-      "to" : "Domain | imap.example.com | Domain for imap.example.com"
-    }, {
-      "type" : "MANAGES",
-      "to" : "Domain | pop3.example.com | Domain for pop3.example.com"
     }, {
       "type" : "SEND_THROUGHT",
       "to" : "EmailRelay | example-relay | relay.example.com:587 AAA"
@@ -1994,10 +1901,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
     }
   }, {
     "resource" : "WebsiteCertificate | example.com | 28247946f93580251ab809d91797275c54851d05, 2018-05-04, 2018-06-04",
-    "links" : [ {
-      "type" : "MANAGES",
-      "to" : "Domain | example.com | Domain for example.com"
-    } ],
+    "links" : [ ],
     "tags" : [ ],
     "content" : {
       "certificate" : "-----BEGIN CERTIFICATE-----
@@ -2106,10 +2010,7 @@ nAzZ77SwvIuhk5hgWeRwqx8CAwEAAQ==
     }
   }, {
     "resource" : "WebsiteCertificate | mail.example.com | f890dc9be9a6b5116de69f1ed649b5524b92a4ef, 2018-05-04, 2018-06-04",
-    "links" : [ {
-      "type" : "MANAGES",
-      "to" : "Domain | mail.example.com | Domain for mail.example.com"
-    } ],
+    "links" : [ ],
     "tags" : [ ],
     "content" : {
       "certificate" : "-----BEGIN CERTIFICATE-----
