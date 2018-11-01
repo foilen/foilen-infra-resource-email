@@ -57,8 +57,8 @@
 		},
 		{
 			"resourceType": "Machine",
-			"resourceName": "localhost",
-			"resourceJson": "{\"name\":\"localhost\",\"publicIp\":\"127.0.0.1\",\"resourceCategory\":\"INFRASTRUCTURE\",\"resourceDescription\":\"localhost\",\"resourceEditorName\":\"Machine\",\"resourceName\":\"localhost\"}"
+			"resourceName": "localhost.foilen-lab.com",
+			"resourceJson": "{\"name\":\"localhost.foilen-lab.com\",\"publicIp\":\"127.0.0.1\",\"resourceCategory\":\"INFRASTRUCTURE\",\"resourceDescription\":\"localhost.foilen-lab.com\",\"resourceEditorName\":\"Machine\",\"resourceName\":\"localhost.foilen-lab.com\"}"
 		},
 		{
 			"resourceType": "MariaDB Database",
@@ -106,7 +106,7 @@
 		{
 			"fromResourceTypeAndName": "Apache James Email Server/james_server",
 			"linkType": "INSTALLED_ON",
-			"toResourceTypeAndName": "Machine/localhost"
+			"toResourceTypeAndName": "Machine/localhost.foilen-lab.com"
 		},
 		{
 			"fromResourceTypeAndName": "Apache James Email Server/james_server",
@@ -196,7 +196,7 @@
 		{
 			"fromResourceTypeAndName": "MariaDB Server/db_server_email",
 			"linkType": "INSTALLED_ON",
-			"toResourceTypeAndName": "Machine/localhost"
+			"toResourceTypeAndName": "Machine/localhost.foilen-lab.com"
 		},
 		{
 			"fromResourceTypeAndName": "MariaDB Server/db_server_email",

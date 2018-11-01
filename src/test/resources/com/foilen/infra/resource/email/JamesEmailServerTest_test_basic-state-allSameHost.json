@@ -3,7 +3,7 @@
     "resource" : "Application | db_server_email | ",
     "links" : [ {
       "type" : "INSTALLED_ON",
-      "to" : "Machine | localhost | localhost (127.0.0.1)"
+      "to" : "Machine | localhost.foilen-lab.com | localhost.foilen-lab.com (127.0.0.1)"
     }, {
       "type" : "RUN_AS",
       "to" : "UnixUser | mariadb | /home/mariadb"
@@ -104,7 +104,7 @@ password=ABC"
     "resource" : "Application | james_server | Apache James email server",
     "links" : [ {
       "type" : "INSTALLED_ON",
-      "to" : "Machine | localhost | localhost (127.0.0.1)"
+      "to" : "Machine | localhost.foilen-lab.com | localhost.foilen-lab.com (127.0.0.1)"
     }, {
       "type" : "RUN_AS",
       "to" : "UnixUser | james | /home/james"
@@ -1416,11 +1416,11 @@ configuration.directory.in.classpath.last=../conf/lib/*
         },
         "portsRedirect" : [ {
           "localPort" : 3306,
-          "machineContainerEndpoint" : "localhost/db_server_email/MYSQL_TCP",
+          "machineContainerEndpoint" : "localhost.foilen-lab.com/db_server_email/MYSQL_TCP",
           "toContainerName" : "db_server_email",
           "toEndpoint" : "MYSQL_TCP",
-          "toLocalMachine" : true,
-          "toMachine" : "localhost"
+          "toLocalMachine" : false,
+          "toMachine" : "localhost.foilen-lab.com"
         } ],
         "runAs" : 72001,
         "services" : [ {
@@ -1472,16 +1472,16 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "type" : "MX"
     }
   }, {
-    "resource" : "DnsEntry | localhost / A | 127.0.0.1",
+    "resource" : "DnsEntry | localhost.foilen-lab.com / A | 127.0.0.1",
     "links" : [ ],
     "tags" : [ ],
     "content" : {
       "details" : "127.0.0.1",
       "meta" : { },
-      "name" : "localhost",
+      "name" : "localhost.foilen-lab.com",
       "resourceCategory" : "NET",
       "resourceDescription" : "127.0.0.1",
-      "resourceName" : "localhost / A",
+      "resourceName" : "localhost.foilen-lab.com / A",
       "type" : "A"
     }
   }, {
@@ -1504,7 +1504,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "to" : "DnsEntry | mail.example.com / A | 127.0.0.1"
     }, {
       "type" : "POINTS_TO",
-      "to" : "Machine | localhost | localhost (127.0.0.1)"
+      "to" : "Machine | localhost.foilen-lab.com | localhost.foilen-lab.com (127.0.0.1)"
     } ],
     "tags" : [ ],
     "content" : {
@@ -1683,7 +1683,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "to" : "AttachableMariaDB | db_database_email | Local infra to a MariaDB Database"
     }, {
       "type" : "INSTALLED_ON",
-      "to" : "Machine | localhost | localhost (127.0.0.1)"
+      "to" : "Machine | localhost.foilen-lab.com | localhost.foilen-lab.com (127.0.0.1)"
     }, {
       "type" : "MANAGES",
       "to" : "Application | james_server | Apache James email server"
@@ -1722,20 +1722,20 @@ configuration.directory.in.classpath.last=../conf/lib/*
       "resourceName" : "james_server"
     }
   }, {
-    "resource" : "Machine | localhost | localhost (127.0.0.1)",
+    "resource" : "Machine | localhost.foilen-lab.com | localhost.foilen-lab.com (127.0.0.1)",
     "links" : [ {
       "type" : "MANAGES",
-      "to" : "DnsEntry | localhost / A | 127.0.0.1"
+      "to" : "DnsEntry | localhost.foilen-lab.com / A | 127.0.0.1"
     } ],
     "tags" : [ ],
     "content" : {
       "meta" : { },
-      "name" : "localhost",
+      "name" : "localhost.foilen-lab.com",
       "publicIp" : "127.0.0.1",
       "resourceCategory" : "INFRASTRUCTURE",
-      "resourceDescription" : "localhost (127.0.0.1)",
+      "resourceDescription" : "localhost.foilen-lab.com (127.0.0.1)",
       "resourceEditorName" : "Machine",
-      "resourceName" : "localhost"
+      "resourceName" : "localhost.foilen-lab.com"
     }
   }, {
     "resource" : "MariaDBDatabase | db_database_email | ",
@@ -1757,7 +1757,7 @@ configuration.directory.in.classpath.last=../conf/lib/*
     "resource" : "MariaDBServer | db_server_email | ",
     "links" : [ {
       "type" : "INSTALLED_ON",
-      "to" : "Machine | localhost | localhost (127.0.0.1)"
+      "to" : "Machine | localhost.foilen-lab.com | localhost.foilen-lab.com (127.0.0.1)"
     }, {
       "type" : "MANAGES",
       "to" : "Application | db_server_email | "
