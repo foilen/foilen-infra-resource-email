@@ -192,7 +192,7 @@ echo Service is down
 
     <bind>0.0.0.0:10143</bind>
 
-    <connectionBacklog>200</connectionBacklog>
+    <connectionBacklog>2000</connectionBacklog>
     
     <tls socketTLS=\"false\" startTLS=\"true\">
       <keystore>file://conf/keystore-imaps</keystore>
@@ -201,7 +201,7 @@ echo Service is down
     </tls>
 
     <connectionLimit>0</connectionLimit>
-    <connectionLimitPerIP>50</connectionLimitPerIP>
+    <connectionLimitPerIP>200</connectionLimitPerIP>
 
   </imapserver>
   
@@ -211,7 +211,7 @@ echo Service is down
 
     <bind>0.0.0.0:10993</bind>
 
-    <connectionBacklog>200</connectionBacklog>
+    <connectionBacklog>2000</connectionBacklog>
 
     <tls socketTLS=\"true\" startTLS=\"false\">
       <keystore>file://conf/keystore-imaps</keystore>
@@ -220,7 +220,7 @@ echo Service is down
     </tls>
 
     <connectionLimit>0</connectionLimit>
-    <connectionLimitPerIP>50</connectionLimitPerIP>
+    <connectionLimitPerIP>200</connectionLimitPerIP>
 
   </imapserver>
 
@@ -250,113 +250,15 @@ datasource.validationQuery=select 1\r
 "
           }, {
             "a" : "/james-server-app/conf/jmx.properties",
-            "b" : "#  Licensed to the Apache Software Foundation (ASF) under one
-#  or more contributor license agreements.  See the NOTICE file
-#  distributed with this work for additional information
-#  regarding copyright ownership.  The ASF licenses this file
-#  to you under the Apache License, Version 2.0 (the
-#  \"License\"); you may not use this file except in compliance
-#  with the License.  You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing,
-#  software distributed under the License is distributed on an
-#  \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-#  KIND, either express or implied.  See the License for the
-#  specific language governing permissions and limitations
-#  under the License.
-#
-
-#  This template file can be used as example for James Server configuration
-#  DO NOT USE IT AS SUCH AND ADAPT IT TO YOUR NEEDS
-
-#  This template file can be used as example for James Server configuration
-#  DO NOT USE IT AS SUCH AND ADAPT IT TO YOUR NEEDS
-
-# See http://james.apache.org/server/3/config.html for usage
-
-jmx.address=127.0.0.1
+            "b" : "jmx.address=127.0.0.1
 jmx.port=9999
 "
           }, {
             "a" : "/james-server-app/conf/lmtpserver.xml",
             "b" : "<?xml version=\"1.0\"?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one   
-  or more contributor license agreements.  See the NOTICE file 
-  distributed with this work for additional information        
-  regarding copyright ownership.  The ASF licenses this file   
-  to you under the Apache License, Version 2.0 (the            
-  \"License\"); you may not use this file except in compliance   
-  with the License.  You may obtain a copy of the License at   
-                                                               
-    http://www.apache.org/licenses/LICENSE-2.0                 
-                                                               
-  Unless required by applicable law or agreed to in writing,   
-  software distributed under the License is distributed on an  
-  \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY       
-  KIND, either express or implied.  See the License for the    
-  specific language governing permissions and limitations      
-  under the License.                                           
- -->
- 
-<!--
-   This template file can be used as example for James Server configuration
-   DO NOT USE IT AS SUCH AND ADAPT IT TO YOUR NEEDS
--->
- 
-<!-- See http://james.apache.org/server/3/config.html for usage -->
 
 <lmtpservers>
  
-	<!-- The LMTP server is disabled by default -->
-	<!-- Disabling blocks will stop them from listening, -->
-	<!-- but does not free as many resources as removing them would -->
-	<lmtpserver enabled=\"false\">
-	
-       <jmxName>lmtpserver</jmxName>
-
-	   <!-- LMTP should not be reachable from outside your network so bind it to loopback-->
-	   <bind>127.0.0.1:24</bind>
-	    
-	   <connectionBacklog>200</connectionBacklog>
-	      
-       <!-- This is the name used by the server to identify itself in the LMTP -->
-       <!-- protocol.  If autodetect is TRUE, the server will discover its -->
-       <!-- own host name and use that in the protocol.  If discovery fails, -->
-       <!-- the value of 'localhost' is used.  If autodetect is FALSE, James -->
-       <!-- will use the specified value. -->
-       <!--
-       <helloName autodetect=\"true\">myMailServer</helloName>
-        -->
-       <!-- connection timeout in secconds -->
-       <connectiontimeout>1200</connectiontimeout>
-      
-       <!-- Set the maximum simultaneous incoming connections for this service -->
-       <connectionLimit>0</connectionLimit>
-         
-       <!-- Set the maximum simultaneous incoming connections per IP for this service -->
-       <connectionLimitPerIP>0</connectionLimitPerIP>
-         
-       <!--  This sets the maximum allowed message size (in kilobytes) for this -->
-       <!--  LMTP service. If unspecified, the value defaults to 0, which means no limit. -->
-       <maxmessagesize>0</maxmessagesize>
-         
-        <!-- This sets the LMTPGreeting which will be used when connect to the lmtpserver -->
-        <!-- If none is specified a default is generated -->
-        <!--
-        <smtpGreeting>JAMES LMTP Server</smtpGreeting>
-         -->
-         
-       <handlerchain>
-           <!-- This loads the core CommandHandlers. Only remove this if you really -->
-           <!-- know what you are doing -->
-           <handler class=\"org.apache.james.lmtpserver.CoreCmdHandlerLoader\"/>
-       </handlerchain>
-
-	</lmtpserver>
-	
 </lmtpservers>
 "
           }, {
@@ -505,68 +407,14 @@ log4j.logger.etm.core.monitor.EtmMonitor= DEBUG, CONS, FILE
           }, {
             "a" : "/james-server-app/conf/mailbox.xml",
             "b" : "<?xml version=\"1.0\"?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one   
-  or more contributor license agreements.  See the NOTICE file 
-  distributed with this work for additional information        
-  regarding copyright ownership.  The ASF licenses this file   
-  to you under the Apache License, Version 2.0 (the            
-  \"License\"); you may not use this file except in compliance   
-  with the License.  You may obtain a copy of the License at   
-                                                               
-    http://www.apache.org/licenses/LICENSE-2.0                 
-                                                               
-  Unless required by applicable law or agreed to in writing,   
-  software distributed under the License is distributed on an  
-  \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY       
-  KIND, either express or implied.  See the License for the    
-  specific language governing permissions and limitations      
-  under the License.                                           
- -->
- 
-<!--
-   This template file can be used as example for James Server configuration
-   DO NOT USE IT AS SUCH AND ADAPT IT TO YOUR NEEDS
--->
- 
-<!-- See http://james.apache.org/server/3/config.html for usage -->
  
 <mailbox>
-   <!-- supported providers are: -->
-   <!-- jpa, jcr, maildir, hbase, memory -->
-   <!--  -->
-   <!-- Be aware that maildir will only work on unix like operation systems! -->
    <provider>jpa</provider>
 </mailbox>
 "
           }, {
             "a" : "/james-server-app/conf/mailrepositorystore.xml",
             "b" : "<?xml version=\"1.0\"?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one   
-  or more contributor license agreements.  See the NOTICE file 
-  distributed with this work for additional information        
-  regarding copyright ownership.  The ASF licenses this file   
-  to you under the Apache License, Version 2.0 (the            
-  \"License\"); you may not use this file except in compliance   
-  with the License.  You may obtain a copy of the License at   
-                                                               
-    http://www.apache.org/licenses/LICENSE-2.0                 
-                                                               
-  Unless required by applicable law or agreed to in writing,   
-  software distributed under the License is distributed on an  
-  \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY       
-  KIND, either express or implied.  See the License for the    
-  specific language governing permissions and limitations      
-  under the License.                                           
- -->
-
-<!--
-   This template file can be used as example for James Server configuration
-   DO NOT USE IT AS SUCH AND ADAPT IT TO YOUR NEEDS
--->
- 
-<!-- See http://james.apache.org/server/3/config.html for usage -->
 
 <mailrepositorystore>
 
@@ -610,68 +458,6 @@ log4j.logger.etm.core.monitor.EtmMonitor= DEBUG, CONS, FILE
 
 <managesieveservers>
 
-   <managesieveserver enabled=\"false\">
-
-     <jmxName>managesieveserver</jmxName>
-
-     <!-- Configure this to bind to a specific inetaddress -->
-     <!-- Please NOTE: you should add this IP also to your RemoteAddrNotInNetwork -->
-     <!-- in order to avoid relay check for locallly generated bounces -->
-     <!-- 
-            Port 4190 is the well-known/IANA registered port for ManageSieve.
-            -->
-     <bind>0.0.0.0:4190</bind>
-
-     <connectionBacklog>200</connectionBacklog>
-
-     <!-- Set to true to support STARTTLS or TLS for the Socket.
-           To use this you need to copy sunjce_provider.jar to /path/james/lib directory.
-      -->
-     <tls socketTLS=\"false\" startTLS=\"false\">
-       <!-- To create a new keystore execute:
-        keytool -genkey -alias james -keyalg RSA -keystore /path/to/james/conf/keystore
-         -->
-       <keystore>file://conf/keystore</keystore>
-       <secret>yoursecret</secret>
-       <provider>org.bouncycastle.jce.provider.BouncyCastleProvider</provider>
-       <!-- The algorithm is optional and only needs to be specified when using something other
-        than the Sun JCE provider - You could use IbmX509 with IBM Java runtime. -->
-       <algorithm>SunX509</algorithm>
-     </tls>
-         
-        <!-- connection timeout in secconds -->
-        <connectiontimeout>360</connectiontimeout>
-
-        <!-- Set the maximum simultaneous incoming connections for this service -->
-        <connectionLimit>0</connectionLimit>
-         
-        <!-- Set the maximum simultaneous incoming connections per IP for this service -->
-        <connectionLimitPerIP>0</connectionLimitPerIP>
-
-        <!--  Uncomment this if you want to verify sender addresses, ensuring that -->
-        <!--  the sender address matches the user who has authenticated. -->
-        <!--  This prevents a user of your mail server from acting as someone else -->
-        <!--  If unspecified, default value is true -->
-        <!--
-        <verifyIdentity>true</verifyIdentity>
-         -->
-
-        <!--  This sets the maximum allowed message size (in kilobytes) for this -->
-        <!--  ManageSieve service. If unspecified, the value defaults to 0, which means no limit. -->
-        <maxmessagesize>0</maxmessagesize>
-         
-        <!--  This sets wether to enforce the use of HELO/EHLO salutation before a -->
-        <!--  MAIL command is accepted. If unspecified, the value defaults to true -->
-        <!-- 
-        <heloEhloEnforcement>true</heloEhloEnforcement>
-         -->
-         
-        <!-- WARNING: This is Non-RFC compliant (default value: true) -->
-        <!-- See: http://wiki.apache.org/james/StandardsComplianceStatement -->
-        <addressBracketsEnforcement>true</addressBracketsEnforcement>
-  
-   </managesieveserver>
-
 </managesieveservers>
 
 
@@ -682,54 +468,27 @@ log4j.logger.etm.core.monitor.EtmMonitor= DEBUG, CONS, FILE
 
 <pop3servers>
 
-	<!-- The POP3 server is enabled by default -->
-	<!-- Disabling blocks will stop them from listening, -->
-	<!-- but does not free as many resources as removing them would -->
 	<pop3server enabled=\"true\">
 	
 	   <jmxName>pop3server</jmxName>
 	
-	   <!-- Configure this to bind to a specific inetaddress -->
-	   <!-- port 995 is the well-known/IANA registered port for POP3S  ie over SSL/TLS -->
-	   <!-- port 110 is the well-known/IANA registered port for Standard POP3 -->
 	   <bind>0.0.0.0:10110</bind>
 	
 	   <connectionBacklog>200</connectionBacklog>
 	
-	   <!-- Set to true to support STARTTLS or SSL for the Socket.
-	         To use this you need to copy sunjce_provider.jar to /path/james/lib directory.
-	    -->
 	   <tls socketTLS=\"false\" startTLS=\"true\">
-	       <!-- To create a new keystore execute:
-	             keytool -genkey -alias james -keyalg RSA -keystore /path/to/james/conf/keystore
-	        -->
 	       <keystore>file://conf/keystore-pop3s</keystore>
 	       <secret>james</secret>
 	       <provider>org.bouncycastle.jce.provider.BouncyCastleProvider</provider>
 	   </tls>
 	      
-       <!-- This is the name used by the server to identify itself in the POP3 -->
-       <!-- protocol.  If autodetect is TRUE, the server will discover its -->
-       <!-- own host name and use that in the protocol.  If discovery fails, -->
-       <!-- the value of 'localhost' is used.  If autodetect is FALSE, James -->
-       <!-- will use the specified value. -->
-       <!--
-       <helloName autodetect=\"true\">myMailServer</helloName>
-        -->
-       <!-- connection timeout in secconds -->
-       <connectiontimeout>1200</connectiontimeout>
-      
-       <!-- Set the maximum simultaneous incoming connections for this service -->
-       <connectionLimit>0</connectionLimit>
-         
-       <!-- Set the maximum simultaneous incoming connections per IP for this service -->
-       <connectionLimitPerIP>50</connectionLimitPerIP>
-         
-       <handlerchain>
-           <!-- This loads the core CommandHandlers. Only remove this if you really -->
-           <!-- know what you are doing -->
-           <handler class=\"org.apache.james.pop3server.core.CoreCmdHandlerLoader\"/>
-       </handlerchain>
+     <connectiontimeout>1200</connectiontimeout>
+     <connectionLimit>0</connectionLimit>
+     <connectionLimitPerIP>50</connectionLimitPerIP>
+       
+     <handlerchain>
+         <handler class=\"org.apache.james.pop3server.core.CoreCmdHandlerLoader\"/>
+     </handlerchain>
 	    
 	</pop3server>
 	
@@ -738,136 +497,29 @@ log4j.logger.etm.core.monitor.EtmMonitor= DEBUG, CONS, FILE
           }, {
             "a" : "/james-server-app/conf/quota.xml",
             "b" : "<?xml version=\"1.0\"?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one
-  or more contributor license agreements.  See the NOTICE file
-  distributed with this work for additional information
-  regarding copyright ownership.  The ASF licenses this file
-  to you under the Apache License, Version 2.0 (the
-  \"License\"); you may not use this file except in compliance
-  with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing,
-  software distributed under the License is distributed on an
-  \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, either express or implied.  See the License for the
-  specific language governing permissions and limitations
-  under the License.
- -->
-
-<!--
-   This template file can be used as example for James Server configuration
-   DO NOT USE IT AS SUCH AND ADAPT IT TO YOUR NEEDS
--->
-
-<!-- See http://james.apache.org/server/3/config.html for usage -->
-
-<!--
-        This configuration file allows you to customize the way quota are handled on this server.
-        You need to rename it in quota.xml so that it gets interpreted by James on startup.
-
-        The different configuration options are detailed here.
-
-        Read RFC-2087 for full details.
--->
 
 <quota>
-    <!--
-        Quota implementation is based on several components:
-          - QuotaRootResolver: In regard of quota management, mailboxes forms abstract groups called QUOTA ROOT. This
-          component finds to which QUOTA ROOT a mailbox belongs
-          - Current quota manager: Counters for current values: how many messages belongs to this quota root ? Which
-          size ?
-          - Max Quota manager: Sets a maximum value QUOTA ROOT resources can not exceed.
-          - QuotaManager: assemble Current quota manager and Max quota manager.
-          - Listening quota updater: Event system based quota update. On each APPED / COPY /EXPUNGE command, current
-          quotas gets updated.
-    -->
 
-    <quotaRootResolver>
-        <!--
-        Possible value:
-         - default
-        -->
-        <provider>default</provider>
-    </quotaRootResolver>
-    <currentQuotaManager>
-        <!--
-        Possible value for provider:
-         - none: when you use fake as a value for quotaManager's provider
-         - inmemory
-         - cassandra
-         - jpa
+  <quotaRootResolver>
+    <provider>default</provider>
+  </quotaRootResolver>
 
-        The inmemory implementation:
-         - Does not work in a distributed context
-        Note that quota need to be (lazy) re-calculated after each starts
+  <currentQuotaManager>
+    <provider>none</provider>
+  </currentQuotaManager>
 
-        Cassandra implementation.
-        Non existing quota are considered as null. No cache. It needs to be always enabled, or you might get some
-        quota synchronisation issues.
-         -->
-        <provider>none</provider>
-    </currentQuotaManager>
-    <maxQuotaManager>
-        <!--
-        This component is exposed to the CLI for quota administration tasks.
+  <maxQuotaManager>
+    <provider>fake</provider>
+  </maxQuotaManager>
 
-        Possible value are:
-         - fake: will always return UNLIMITED. Throws on modifications.
-         - fixed: all QUOTA ROOT get the same upper bound for their quotas.
-         - inmemory: allows you to define QUOTA ROOT specific limits, backed with a fixed policy. It does not
-         work in a distributed context.
-         - cassandra: Same thing than inmemory but backed on cassandra. Works on a distributed context. Note that using
-         the default* configuration options and the CLI to set default options is dangerous as server startup might override
-         CLI values.
-         - jpa: Same thing than inmemory but backed on jpa. Works on a distributed context. Note that using
-         the default* configuration options and the CLI to set default options is dangerous as server startup might override
-         CLI values.
-        -->
-        <provider>fake</provider>
-        <!--
-        Configuration option for setting max policies for MaxQuotaManager ( message count and byte )
-        -->
-        <!--
-        <defaultMaxMessage>100000</defaultMaxMessage>
-        <defaultMaxStorage>5368709120</defaultMaxStorage>
-        -->
-        <!--
-        Configuration option for setting max values per quota root ( message count and byte )
-        -->
-        <!--
-        <maxMessage>
-            <quotaRoot>#private&amp;btellier@apache.org</quotaRoot>
-            <value>200000</value>
-        </maxMessage>
-        <maxStorage>
-            <quotaRoot>#private&amp;btellier@apache.org</quotaRoot>
-            <value>10737418240</value>
-        </maxStorage>
-        -->
-    </maxQuotaManager>
-    <quotaManager>
-        <!--
-        The QuotaManager you use.
+  <quotaManager>
+    <provider>fake</provider>
+  </quotaManager>
 
-        Possible values are:
-         - fake: returns only UNKNOWN/UNLIMITED quotas
-         - store: returns quotas using a CurrentQuotaManager and a MaxQuotaManager
-        -->
-        <provider>fake</provider>
-    </quotaManager>
-    <updates>
-        <!--
-        This defines the way your quotas gets updated.
-        Possible values are:
-         - fake
-         - event
-        -->
-        <provider>fake</provider>
-    </updates>
+  <updates>
+    <provider>fake</provider>
+  </updates>
+
 </quota>"
           }, {
             "a" : "/james-server-app/conf/recipientrewritetable.xml",
@@ -1087,8 +739,6 @@ configuration.directory.in.classpath.last=../conf/lib/*
           }, {
             "a" : "/james-server-app/conf/mailetcontainer.xml",
             "b" : "<?xml version=\"1.0\"?>
-
-<!-- See http://james.apache.org/server/3/config.html for usage -->
 
 <mailetcontainer enableJmx=\"true\">
 

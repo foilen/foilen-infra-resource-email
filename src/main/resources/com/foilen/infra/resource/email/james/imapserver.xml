@@ -8,7 +8,7 @@
 
     <bind>0.0.0.0:10143</bind>
 
-    <connectionBacklog>200</connectionBacklog>
+    <connectionBacklog>2000</connectionBacklog>
     
     <tls socketTLS="false" startTLS="true">
       <keystore>file://conf/keystore-imaps</keystore>
@@ -17,7 +17,7 @@
     </tls>
 
     <connectionLimit>0</connectionLimit>
-    <connectionLimitPerIP>50</connectionLimitPerIP>
+    <connectionLimitPerIP>200</connectionLimitPerIP>
 
   </imapserver>
   
@@ -27,7 +27,7 @@
 
     <bind>0.0.0.0:10993</bind>
 
-    <connectionBacklog>200</connectionBacklog>
+    <connectionBacklog>2000</connectionBacklog>
 
     <tls socketTLS="true" startTLS="false">
       <keystore>file://conf/keystore-imaps</keystore>
@@ -36,7 +36,7 @@
     </tls>
 
     <connectionLimit>0</connectionLimit>
-    <connectionLimitPerIP>50</connectionLimitPerIP>
+    <connectionLimitPerIP>200</connectionLimitPerIP>
 
   </imapserver>
 

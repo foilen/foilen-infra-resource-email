@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
 
-<!-- See http://james.apache.org/server/3/config.html for usage -->
-
 <mailetcontainer enableJmx="true">
 
   <context>
