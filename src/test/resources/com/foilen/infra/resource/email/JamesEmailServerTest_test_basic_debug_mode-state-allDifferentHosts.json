@@ -908,7 +908,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= DEBUG, CONS, FILE
     <connectionLimit>0</connectionLimit>
     <connectionLimitPerIP>50</connectionLimitPerIP>
     <verifyIdentity>true</verifyIdentity>
-    <maxmessagesize>25000</maxmessagesize><!-- 25MB -->
+    <maxmessagesize>75000</maxmessagesize><!-- 75MB -->
     <addressBracketsEnforcement>true</addressBracketsEnforcement>
 
     <handlerchain>
@@ -940,7 +940,7 @@ log4j.logger.etm.core.monitor.EtmMonitor= DEBUG, CONS, FILE
     <authorizedAddresses>127.0.0.0/8</authorizedAddresses>
 
     <verifyIdentity>true</verifyIdentity>
-    <maxmessagesize>25000</maxmessagesize><!-- 25MB -->
+    <maxmessagesize>75000</maxmessagesize><!-- 75MB -->
     <addressBracketsEnforcement>true</addressBracketsEnforcement>
 
     <handlerchain>
